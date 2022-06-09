@@ -19,16 +19,18 @@ class Grafo():
       grafo = Graph("G", format='png')
     grafo.attr(shape="circle", rankdir="LR", size="8,5")
     if (clusters > 1):
-      for cluster in range(cluster):
+      for cluster in range(clusters):
         df = self.dataframe.query("cluster == @cluster")
+        print(df)
         with grafo.subgraph(name=f"cluster {cluster}") as c:
-          c.attr(color=cores.pop(), label=f"Cluster {cluster}")
+          c.attr(color=cores.pop(), label=f"Componente {cluster}")
           for index, row in df.iterrows():
-            c.edge(row.origem, row.destino, label=row.label)
-      grafo.save("grafo_com_sub_grafos.png")
+            c.edge(row.origem, row.destino, label=str(row.label))
+      grafo.save("grafo/img/grafo_com_sub_grafos")
+      grafo.view()
     else:
       for index, row in self.dataframe.iterrows():
-          grafo.edge(row.origem, row.destino, label=row.label)
+          grafo.edge(row.origem, row.destino, str(row.label))
       grafo.save("grafo/img/grafo")
       grafo.view()
 

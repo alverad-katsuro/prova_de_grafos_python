@@ -27,11 +27,14 @@ DEBUG = True
 
 ALLOWED_HOSTS = []
 
+TAILWIND_APP_NAME = 'grafo'
 
 # Application definition
 
 INSTALLED_APPS = [
-    'grafo.apps.GrafoConfig'
+    'grafo.apps.GrafoConfig',
+    'tailwind',
+    'django_browser_reload',
     'django.contrib.admin',
     'django.contrib.auth',
     'django.contrib.contenttypes',
