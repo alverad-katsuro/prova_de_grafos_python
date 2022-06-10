@@ -1,5 +1,4 @@
 from django import forms
-from matplotlib import widgets
 
 class GrafoForm(forms.Form):
   digrafo = forms.BooleanField(label="Digrafo", required=False)
