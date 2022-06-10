@@ -52,36 +52,53 @@
 					    <div class="w-full mt-3 lg:w-full flex items-center justify-center bg-white rounded-lg lg:rounded-l-none">
                 <div class="text-center flex-grow">
                   <button class="w-full p-2 font-bold text-white bg-blue-500 rounded-full hover:bg-blue-700 focus:outline-none focus:shadow-outline"
-                    type="button" >
+                    type="submit" >
                     Verificar a existência de uma aresta.
                   </button>
                 </div>
               </div>
+            <div class="md:flex md:mt-8 md:-mx-4">
+              <div class="w-full md:mx-4 rounded-md overflow-hidden bg-cover bg-center">
+                <div class="bg-opacity-50 flex items-center h-full group relative">
+                    <div class="flex-grow">
+                      <button class="w-full p-2 font-bold text-white bg-blue-500 rounded-full hover:bg-blue-700 focus:outline-none focus:shadow-outline" type="submit" >
+                        Informar o grau de um vértice.
+                      </button>
+                    </div>
+                </div>
+              </div>
+              <div class="w-full md:mx-4 rounded-md overflow-hidden bg-cover bg-center">
+                <div class="bg-opacity-50 flex items-center h-full group relative">
+                    <div class="flex-grow">
+                      <input type="text" class=" form-control block w-full px-3 py-1.5 text-base font-normal text-gray-700 bg-white bg-clip-padding border border-solid border-gray-300 rounded transition ease-in-out m-0 focus:text-gray-700 focus:bg-white focus:border-blue-600  focus:outline-none" name="vertice_grau" id="id_vertice_grau" placeholder="R0" />    
+                    </div>
+                </div>
+              </div>
+            </div>
+
+
+            <div class="md:flex md:mt-8 md:-mx-4">
+              <div class="w-full md:mx-4 rounded-md overflow-hidden bg-cover bg-center">
+                <div class="bg-opacity-50 flex items-center h-full group relative">
+                    <div class="flex-grow">
+                      <button class="w-full p-2 font-bold text-white bg-blue-500 rounded-full hover:bg-blue-700 focus:outline-none focus:shadow-outline" type="submit" >
+                        Informar a adjacência de um vértice.
+                      </button>
+                    </div>
+                </div>
+              </div>
+              <div class="w-full md:mx-4 rounded-md overflow-hidden bg-cover bg-center">
+                <div class="bg-opacity-50 flex items-center h-full group relative">
+                    <div class="flex-grow">
+                      <input type="text" class=" form-control block w-full px-3 py-1.5 text-base font-normal text-gray-700 bg-white bg-clip-padding border border-solid border-gray-300 rounded transition ease-in-out m-0 focus:text-gray-700 focus:bg-white focus:border-blue-600  focus:outline-none" name="vertice_adj" id="id_vertice_adj" placeholder="R0" />    
+                    </div>
+                </div>
+              </div>
+            </div>
               <div class="w-full mt-3 lg:w-full flex items-center justify-center bg-white rounded-lg lg:rounded-l-none">
                 <div class="text-center flex-grow">
                   <button class="w-full p-2 font-bold text-white bg-blue-500 rounded-full hover:bg-blue-700 focus:outline-none focus:shadow-outline"
-                    type="button" >
-                  Informar o grau de um vértice.
-                </button>
-                </div>
-                <div class="text-center flex-grow">
-                  {{form.vertice_grau}}
-                </div>
-              </div>
-              <div class="w-full mt-3 lg:w-full flex items-center justify-center bg-white rounded-lg lg:rounded-l-none">
-                <div class="text-center flex-grow">
-                  <button class="w-full p-2 font-bold text-white bg-blue-500 rounded-full hover:bg-blue-700 focus:outline-none focus:shadow-outline" type="button">
-                    Informar a adjacência de um vértice.
-                  </button>
-                </div>
-                <div class="text-center flex-grow">
-                  {{form.vertice_adj}}
-                </div>
-              </div>
-              <div class="w-full mt-3 lg:w-full flex items-center justify-center bg-white rounded-lg lg:rounded-l-none">
-                <div class="text-center flex-grow">
-                  <button class="w-full p-2 font-bold text-white bg-blue-500 rounded-full hover:bg-blue-700 focus:outline-none focus:shadow-outline"
-                    type="button" >
+                    type="submit" >
                     Verificar se um grafo não-orientado é conexo.
                   </button>
                 </div>
@@ -89,7 +106,7 @@
               <div class="w-full mt-3 lg:w-full flex items-center justify-center bg-white rounded-lg lg:rounded-l-none">
                 <div class="text-center flex-grow">
                   <button class="w-full p-2 font-bold text-white bg-blue-500 rounded-full hover:bg-blue-700 focus:outline-none focus:shadow-outline"
-                    type="button" >
+                    type="submit" >
                     Verificar se um dı́grafo é unilateralmente conexo.
                   </button>
                 </div>
@@ -97,7 +114,7 @@
               <div class="w-full mt-3 lg:w-full flex items-center justify-center bg-white rounded-lg lg:rounded-l-none">
                 <div class="text-center flex-grow">
                   <button class="w-full p-2 font-bold text-white bg-blue-500 rounded-full hover:bg-blue-700 focus:outline-none focus:shadow-outline"
-                    type="button" >
+                    type="submit" >
                     Verificar se um dı́grafo é fortemente conexo e informar qual ou quais são os seus componentes fortemente conexos.
                   </button>
                 </div>
@@ -105,7 +122,7 @@
               <div class="w-full mt-3 lg:w-full flex items-center justify-center bg-white rounded-lg lg:rounded-l-none">
                 <div class="text-center flex-grow">
                   <button class="w-full p-2 font-bold text-white bg-blue-500 rounded-full hover:bg-blue-700 focus:outline-none focus:shadow-outline"
-                    type="button" >
+                    type="submit" >
                     Dado um grafo conexo, verificar se ele é cı́clico.
                   </button>
                 </div>
@@ -113,7 +130,7 @@
               <div class="w-full mt-3 lg:w-full flex items-center justify-center bg-white rounded-lg lg:rounded-l-none">
                 <div class="text-center flex-grow">
                   <button class="w-full p-2 font-bold text-white bg-blue-500 rounded-full hover:bg-blue-700 focus:outline-none focus:shadow-outline"
-                    type="button" >
+                    type="submit" >
                     Dado um dı́grafo acı́clico e conexo, informar uma ordenação topológica presente no dı́grafo.
                   </button>
                 </div>
@@ -121,7 +138,7 @@
               <div class="w-full mt-3 lg:w-full flex items-center justify-center bg-white rounded-lg lg:rounded-l-none">
                 <div class="text-center flex-grow">
                   <button class="w-full p-2 font-bold text-white bg-blue-500 rounded-full hover:bg-blue-700 focus:outline-none focus:shadow-outline"
-                    type="button" >
+                    type="submit" >
                     Dado um grafo não-orientado e conexo, verificar se ele é planar, 2-conexo e/ou euleriano. Caso seja possı́vel, informar um ciclo euleriano presente no grafo.
                   </button>
                 </div>
@@ -129,7 +146,7 @@
               <div class="w-full mt-3 lg:w-full flex items-center justify-center bg-white rounded-lg lg:rounded-l-none">
                 <div class="text-center flex-grow">
                   <button class="w-full p-2 font-bold text-white bg-blue-500 rounded-full hover:bg-blue-700 focus:outline-none focus:shadow-outline"
-                    type="button" >
+                    type="submit" >
                     Caso seja possı́vel, encontrar um caminho mais curto (grafos não-ponderados) ou de menor custo (grafos ponderados) entre dois vértices.
                   </button>
                 </div>
@@ -137,7 +154,7 @@
               <div class="w-full mt-3 lg:w-full flex items-center justify-center bg-white rounded-lg lg:rounded-l-none">
                 <div class="text-center flex-grow">
                   <button class="w-full p-2 font-bold text-white bg-blue-500 rounded-full hover:bg-blue-700 focus:outline-none focus:shadow-outline"
-                    type="button" >
+                    type="submit" >
                     Encontrar uma árvore geradora mı́nima de um grafo não-orientado e conexo.
                   </button>
                 </div>

@@ -11,6 +11,7 @@ def index(request):
   form = GrafoForm()
   grafo = Grafo()
   if request.method == 'POST':
+    print(request.POST)
     if request.POST.get('digrafo') == "on":
       grafo.digrafo = True
     if request.POST.get('digrafo') == "False":
