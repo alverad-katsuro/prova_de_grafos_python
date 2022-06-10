@@ -4,7 +4,6 @@ import pandas as pd
 
 
 grafo = Grafo()
-grafo.createDataFrame("R0 R1 155 0\nR3 R1 155 0")
-print(grafo.dataframe)
+grafo.createDataFrame("R0 R1 155 0\nR3 R1 155 1")
 grafo.createImg()
 

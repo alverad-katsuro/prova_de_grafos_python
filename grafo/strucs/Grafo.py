@@ -14,7 +14,6 @@ class Grafo():
     dados = text.split("\n")
     for linha in dados:
       lin = linha.split()
-      print(lin)
       if len(lin) == 4:
         self.createAresta(lin[0], lin[1], lin[2], lin[3])
       elif len(lin) == 3:
@@ -33,14 +32,16 @@ class Grafo():
       grafo = Graph("G", format='png')
     grafo.attr(shape="circle", rankdir="LR", size="8,5")
     if (clusters > 1):
-      for cluster in range(clusters):
+      for cluster in self.dataframe.cluster.unique():
         df = self.dataframe.query("cluster == @cluster")
-        print(df)
         with grafo.subgraph(name=f"cluster {cluster}") as c:
           c.attr(color=cores.pop(), label=f"Componente {cluster}")
           for index, row in df.iterrows():
+            print(df)
             c.edge(row.origem, row.destino, label=str(row.label))
-      grafo.render("grafo/static/images/grafo")
+      grafo.render("grafo/static/images/grafo_com_sub_grafos")
+      grafo_cod = grafo._repr_image_png()
+      return grafo_cod
     else:
       for index, row in self.dataframe.iterrows():
         verdade = row.isnull()
@@ -52,7 +53,7 @@ class Grafo():
         else:
           grafo.node(row.origem)
       grafo.render("grafo/static/images/grafo", overwrite_source=True)
-      a = grafo._repr_image_png()
-      return a
+      grafo_cod = grafo._repr_image_png()
+      return grafo_cod
 
 
