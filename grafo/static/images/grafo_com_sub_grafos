@@ -4,11 +4,8 @@ digraph G {
 		color=yellow label="Componente 1"
 		r0 -> r1 [label=5]
 	}
-	subgraph "cluster nan" {
-		color=pink label="Componente nan"
-	}
 	subgraph "cluster 12" {
-		color=red label="Componente 12"
-		r0 -> r11 [label=5]
+		color=pink label="Componente 12"
+		r0 -> r2 [label=5]
 	}
 }

@@ -38,7 +38,6 @@ class Grafo():
         with grafo.subgraph(name=f"cluster {cluster}") as c:
           c.attr(color=cores.pop(), label=f"Componente {cluster}")
           for index, row in df.iterrows():
-            print(df)
             c.edge(row.origem, row.destino, label=str(row.label))
       grafo.render("grafo/static/images/grafo_com_sub_grafos")
       grafo_cod = grafo._repr_image_png()

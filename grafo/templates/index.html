@@ -45,87 +45,98 @@
                   Insira o Grafo
                 </label>
                 {{form.grafo_text}}
-                <button type="submit" class="w-full px-4 py-2 font-bold text-white bg-blue-500 rounded-full hover:bg-blue-700 focus:outline-none focus:shadow-outline">
+                <button type="submit" class="w-full py-2 mt-2 font-bold text-white bg-blue-500 rounded-full hover:bg-blue-700 focus:outline-none focus:shadow-outline">
                   Criar Grafo
                 </button>
               </div>
 					    <div class="w-full mt-3 lg:w-full flex items-center justify-center bg-white rounded-lg lg:rounded-l-none">
-                <div class="text-center flex-grow mx-2">
-                  <button class="w-full px-4 py-2 font-bold text-white bg-blue-500 rounded-full hover:bg-blue-700 focus:outline-none focus:shadow-outline"
+                <div class="text-center flex-grow">
+                  <button class="w-full p-2 font-bold text-white bg-blue-500 rounded-full hover:bg-blue-700 focus:outline-none focus:shadow-outline"
                     type="button" >
                     Verificar a existência de uma aresta.
                   </button>
                 </div>
-                <div class="m-ytext-center flex-grow mx-2">
-                  <button class="w-full px-4 py-2 font-bold text-white bg-blue-500 rounded-full hover:bg-blue-700 focus:outline-none focus:shadow-outline"
+              </div>
+              <div class="w-full mt-3 lg:w-full flex items-center justify-center bg-white rounded-lg lg:rounded-l-none">
+                <div class="text-center flex-grow">
+                  <button class="w-full p-2 font-bold text-white bg-blue-500 rounded-full hover:bg-blue-700 focus:outline-none focus:shadow-outline"
                     type="button" >
-                    Informar o grau de um vértice.
-                  </button>
+                  Informar o grau de um vértice.
+                </button>
                 </div>
-                <div class="m-ytext-center flex-grow mx-2">
-                  <button class="w-full px-4 py-2 font-bold text-white bg-blue-500 rounded-full hover:bg-blue-700 focus:outline-none focus:shadow-outline"
-                    type="button" >
+                <div class="text-center flex-grow">
+                  {{form.vertice_grau}}
+                </div>
+              </div>
+              <div class="w-full mt-3 lg:w-full flex items-center justify-center bg-white rounded-lg lg:rounded-l-none">
+                <div class="text-center flex-grow">
+                  <button class="w-full p-2 font-bold text-white bg-blue-500 rounded-full hover:bg-blue-700 focus:outline-none focus:shadow-outline" type="button">
                     Informar a adjacência de um vértice.
                   </button>
                 </div>
-                <div class="m-ytext-center flex-grow mx-2">
-                  <button class="w-full px-4 py-2 font-bold text-white bg-blue-500 rounded-full hover:bg-blue-700 focus:outline-none focus:shadow-outline"
+                <div class="text-center flex-grow">
+                  {{form.vertice_adj}}
+                </div>
+              </div>
+              <div class="w-full mt-3 lg:w-full flex items-center justify-center bg-white rounded-lg lg:rounded-l-none">
+                <div class="text-center flex-grow">
+                  <button class="w-full p-2 font-bold text-white bg-blue-500 rounded-full hover:bg-blue-700 focus:outline-none focus:shadow-outline"
                     type="button" >
                     Verificar se um grafo não-orientado é conexo.
                   </button>
                 </div>
               </div>
               <div class="w-full mt-3 lg:w-full flex items-center justify-center bg-white rounded-lg lg:rounded-l-none">
-                <div class="m-ytext-center flex-grow mx-2">
-                  <button class="w-full px-4 py-2 font-bold text-white bg-blue-500 rounded-full hover:bg-blue-700 focus:outline-none focus:shadow-outline"
+                <div class="text-center flex-grow">
+                  <button class="w-full p-2 font-bold text-white bg-blue-500 rounded-full hover:bg-blue-700 focus:outline-none focus:shadow-outline"
                     type="button" >
                     Verificar se um dı́grafo é unilateralmente conexo.
                   </button>
                 </div>
               </div>
               <div class="w-full mt-3 lg:w-full flex items-center justify-center bg-white rounded-lg lg:rounded-l-none">
-                <div class="m-ytext-center flex-grow mx-2">
-                  <button class="w-full px-4 py-2 font-bold text-white bg-blue-500 rounded-full hover:bg-blue-700 focus:outline-none focus:shadow-outline"
+                <div class="text-center flex-grow">
+                  <button class="w-full p-2 font-bold text-white bg-blue-500 rounded-full hover:bg-blue-700 focus:outline-none focus:shadow-outline"
                     type="button" >
                     Verificar se um dı́grafo é fortemente conexo e informar qual ou quais são os seus componentes fortemente conexos.
                   </button>
                 </div>
               </div>
               <div class="w-full mt-3 lg:w-full flex items-center justify-center bg-white rounded-lg lg:rounded-l-none">
-                <div class="m-ytext-center flex-grow mx-2">
-                  <button class="w-full px-4 py-2 font-bold text-white bg-blue-500 rounded-full hover:bg-blue-700 focus:outline-none focus:shadow-outline"
+                <div class="text-center flex-grow">
+                  <button class="w-full p-2 font-bold text-white bg-blue-500 rounded-full hover:bg-blue-700 focus:outline-none focus:shadow-outline"
                     type="button" >
                     Dado um grafo conexo, verificar se ele é cı́clico.
                   </button>
                 </div>
               </div>
               <div class="w-full mt-3 lg:w-full flex items-center justify-center bg-white rounded-lg lg:rounded-l-none">
-                <div class="m-ytext-center flex-grow mx-2">
-                  <button class="w-full px-4 py-2 font-bold text-white bg-blue-500 rounded-full hover:bg-blue-700 focus:outline-none focus:shadow-outline"
+                <div class="text-center flex-grow">
+                  <button class="w-full p-2 font-bold text-white bg-blue-500 rounded-full hover:bg-blue-700 focus:outline-none focus:shadow-outline"
                     type="button" >
                     Dado um dı́grafo acı́clico e conexo, informar uma ordenação topológica presente no dı́grafo.
                   </button>
                 </div>
               </div>
               <div class="w-full mt-3 lg:w-full flex items-center justify-center bg-white rounded-lg lg:rounded-l-none">
-                <div class="m-ytext-center flex-grow mx-2">
-                  <button  class="w-full px-4 py-2 font-bold text-white bg-blue-500 rounded-full hover:bg-blue-700 focus:outline-none focus:shadow-outline"
+                <div class="text-center flex-grow">
+                  <button class="w-full p-2 font-bold text-white bg-blue-500 rounded-full hover:bg-blue-700 focus:outline-none focus:shadow-outline"
                     type="button" >
                     Dado um grafo não-orientado e conexo, verificar se ele é planar, 2-conexo e/ou euleriano. Caso seja possı́vel, informar um ciclo euleriano presente no grafo.
                   </button>
                 </div>
               </div>
               <div class="w-full mt-3 lg:w-full flex items-center justify-center bg-white rounded-lg lg:rounded-l-none">
-                <div class="m-ytext-center flex-grow mx-2">
-                  <button class="w-full px-4 py-2 font-bold text-white bg-blue-500 rounded-full hover:bg-blue-700 focus:outline-none focus:shadow-outline"
+                <div class="text-center flex-grow">
+                  <button class="w-full p-2 font-bold text-white bg-blue-500 rounded-full hover:bg-blue-700 focus:outline-none focus:shadow-outline"
                     type="button" >
                     Caso seja possı́vel, encontrar um caminho mais curto (grafos não-ponderados) ou de menor custo (grafos ponderados) entre dois vértices.
                   </button>
                 </div>
               </div>
               <div class="w-full mt-3 lg:w-full flex items-center justify-center bg-white rounded-lg lg:rounded-l-none">
-                <div class="m-ytext-center flex-grow mx-2">
-                  <button class="w-full px-4 py-2 font-bold text-white bg-blue-500 rounded-full hover:bg-blue-700 focus:outline-none focus:shadow-outline"
+                <div class="text-center flex-grow">
+                  <button class="w-full p-2 font-bold text-white bg-blue-500 rounded-full hover:bg-blue-700 focus:outline-none focus:shadow-outline"
                     type="button" >
                     Encontrar uma árvore geradora mı́nima de um grafo não-orientado e conexo.
                   </button>
