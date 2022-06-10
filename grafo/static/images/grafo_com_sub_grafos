@@ -1,11 +1,21 @@
-graph G {
+digraph G {
 	rankdir=LR shape=circle size="8,5"
 	subgraph "cluster 1" {
 		color=yellow label="Componente 1"
-		r0 -- r1 [label=5]
+		r0 -> r1 [label=5]
 	}
 	subgraph "cluster 0" {
 		color=pink label="Componente 0"
-		r1 -- r2 [label=8]
+		r1 -> r2 [label=8]
+		r3 -> r0 [label=15]
+		r9 -> r8 [label=15]
+		r10 -> r11 [label=15]
+		r33 -> r111 [label=15]
+		r11 -> r1 [label=15]
+		r4 -> r8 [label=15]
+	}
+	subgraph "cluster 2" {
+		color=red label="Componente 2"
+		r4 -> r0 [label=15]
 	}
 }

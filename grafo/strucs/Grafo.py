@@ -8,7 +8,8 @@ class Grafo():
     self.digrafo = digrafo
 
   def createAresta(self, origem, destino=np.nan, label=np.nan, cluster=np.nan):
-    self.dataframe = pd.concat([self.dataframe, pd.DataFrame([[origem, destino, label, cluster]], columns=["origem", "destino", "label", "cluster"])], ignore_index=True)
+    if len(self.dataframe.query("(origem == @origem) & (destino == @destino) & (label == @label) & (cluster == @cluster)")) == 0:
+      self.dataframe = pd.concat([self.dataframe, pd.DataFrame([[origem, destino, label, cluster]], columns=["origem", "destino", "label", "cluster"])], ignore_index=True)
 
   def createDataFrame(self, text):
     dados = text.split("\n")

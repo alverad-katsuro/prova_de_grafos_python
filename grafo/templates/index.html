@@ -18,7 +18,7 @@
 					<!-- Col -->
 					<div class="justify-center">
             {% if image != None %}
-            <img src="data:image/png;base64,{{image}}" class="block w-full p-1 bg-white border rounded max-w-sm"/>
+            <img src="data:image/png;base64,{{image}}" class="max-w-full h-auto block w-full p-1 bg-white border rounded max-w-sm"/>
             {% else %}
             <img src="{% static 'images/initial.jpeg' %}" class="max-w-full h-auto block w-full p-1 bg-white border rounded max-w-sm"/>
             {% endif %}
