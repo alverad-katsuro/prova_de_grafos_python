@@ -6,6 +6,8 @@ class Grafo():
   def __init__(self, digrafo = False):
     self.dataframe = pd.DataFrame(columns=["origem", "destino", "label", "cluster"])
     self.digrafo = digrafo
+    self.log = []
+    self.imagem_bin = None
 
   def createAresta(self, origem, destino=np.nan, label=np.nan, cluster=np.nan):
     if len(self.dataframe.query("(origem == @origem) & (destino == @destino) & (label == @label) & (cluster == @cluster)")) == 0:
@@ -40,8 +42,7 @@ class Grafo():
           for index, row in df.iterrows():
             c.edge(row.origem, row.destino, label=str(row.label))
       grafo.render("grafo/static/images/grafo_com_sub_grafos")
-      grafo_cod = grafo._repr_image_png()
-      return grafo_cod
+      self.imagem_bin = grafo._repr_image_png()
     else:
       for index, row in self.dataframe.iterrows():
         verdade = row.isnull()
@@ -53,7 +54,6 @@ class Grafo():
         else:
           grafo.node(row.origem)
       grafo.render("grafo/static/images/grafo", overwrite_source=True)
-      grafo_cod = grafo._repr_image_png()
-      return grafo_cod
+      self.imagem_bin = grafo._repr_image_png()
 
 

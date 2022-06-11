@@ -1,4 +1,3 @@
-digraph G {
+graph G {
 	rankdir=LR shape=circle size="8,5"
-	r0 -> r1 [label=5]
 }
