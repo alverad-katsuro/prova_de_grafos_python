@@ -16,7 +16,8 @@ o que faz com que seja possível a disposição dos grafos resultantes de forma 
   - Django;
   - Pandas;
   - Graphviz;
-  
+  - Python 3.8 ou superior;
+   
   Pelo fato de essas dependências estarem reunidas em um arquivo denominado _requirements.txt_,
   é possível instalar as dependências citadas pelo seguinte comando:
   ```
