@@ -1,5 +1,6 @@
 import pandas as pd
 import numpy as np
+
 from graphviz import Digraph, Graph
 
 class Grafo():
@@ -8,6 +9,100 @@ class Grafo():
     self.digrafo = digrafo
     self.log = []
     self.imagem_bin = None
+
+  def hasAresta(self): 
+    #Requisito 1: Verificar a existencia de uma aresta.
+    return False if (self.dataframe["destino"].isnull().values.all()) else True
+
+  def calcGrau(self, input_name): 
+    #Requisito 2: Informar o grau de um vertice.
+    grau = 0
+    for _, row in self.dataframe.iterrows():
+      if ((row["origem"] == input_name) or (row["destino"] == input_name)):
+        if (row["origem"] == row["destino"]):
+          grau += 2
+        else: 
+          grau += 1
+      else:
+        continue
+    return grau
+
+  def calcAdjacencia(self, input_name): 
+    #Requisito 3: Informar a adjacencia de um vertice.
+    if (self.digrafo == True):
+      return (self.calcVizinhoSucessor(input_name), self.calcVizinhoAntecessor(input_name))
+    else:
+      return self.calcVizinhoGeneric(input_name)
+
+  def calcVizinhoGeneric(self, input_name): 
+    #Requisito 3: Informar a adjacencia de um vértice (Not Digrafo).
+    viz = {}
+    for _, row in self.dataframe.iterrows():
+      if (row["origem"] == input_name):
+        viz.add(row["destino"])
+      elif (row["destino"] == input_name):
+        viz.add(row["origem"])
+      else:
+        continue
+    if (len(viz) > 0):
+      viz.append(input_name)
+    return viz
+
+  def calcVizinhoSucessor(self, input_name): 
+    #Requisito 3: Informar a adjacencia de um vertice (Digrafo)
+    viz = {}
+    for _, row in self.dataframe.iterrows():
+      if (row["origem"] == input_name):
+        viz.add(row["destino"])
+      else:
+        continue
+    if (len(viz) > 0):
+      viz.append(input_name)
+    return viz
+
+  def calcVizinhoAntecessor(self, input_name): 
+    #Requisito 3: Informar a adjacencia de um vertice. (Digrafo)
+    if (self.digrafo == True):
+      return (self.calcVizinhoSucessor(input_name), self.calcVizinhoAntecessor(input_name))
+    else:
+      viz = set()
+      for _, row in self.dataframe.iterrows():
+        if (row["destino"] == input_name):
+          viz.add(row["origem"])
+        else:
+          continue
+      if (len(viz) > 0):
+        viz.append(input_name)
+      return viz
+
+  def conexidadeNotDigrafo(self): 
+    #4. Verificar se um grafo não-orientado é conexo.
+    if (self.digrafo == False):
+      vertices_conexo = set()
+      vertices_desconexo = set()
+      for _, row in self.dataframe.iterrows():
+        if not (pd.isnull(row["destino"])):
+          vertices_conexo.add(row["origem"])
+          vertices_conexo.add(row["destino"])
+        else:
+          vertices_desconexo.add(row["origem"])
+      return True if vertices_conexo.issuperset(vertices_desconexo) else False  
+      
+
+  def buscaProfundidade(self):
+    pass
+    
+  def ordenacaoTopologica(self): 
+    #Requisito 9: Dado um dı́grafo acı́clico e conexo, informar uma ordenação topológica presente no dı́grafo
+    if (self.digrafo == True):
+      order = self.buscaEmProfundidade()
+      for element in order:
+        print(element)
+      
+
+  def displayInteger(self):
+    pass
+  
 
   def createAresta(self, origem, destino=np.nan, label=np.nan, cluster=np.nan):
     if len(self.dataframe.query("(origem == @origem) & (destino == @destino) & (label == @label) & (cluster == @cluster)")) == 0:
