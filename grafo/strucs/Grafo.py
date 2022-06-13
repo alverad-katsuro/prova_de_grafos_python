@@ -39,13 +39,12 @@ class Grafo():
     viz = set()
     for _, row in self.dataframe.iterrows():
       if ((row["origem"] == input_name) and (not pd.isnull(row["destino"]))):
+        viz.add(row["origem"])
         viz.add(row["destino"])
       elif (row["destino"] == input_name):
         viz.add(row["origem"])
       else:
         continue
-    if (len(viz) > 0):
-      viz.add(input_name)
     return viz
 
   def __calcVizinhoSucessor(self, input_name): 
@@ -53,11 +52,10 @@ class Grafo():
     viz = set()
     for _, row in self.dataframe.iterrows():
       if ((row["origem"] == input_name) and (not pd.isnull(row["destino"]))):
+        viz.add(row["origem"])
         viz.add(row["destino"])
       else:
         continue
-    if (len(viz) > 0):
-      viz.add(input_name)
     return viz
 
   def __calcVizinhoAntecessor(self, input_name): 
@@ -65,11 +63,10 @@ class Grafo():
     viz = set()
     for _, row in self.dataframe.iterrows():
       if (row["destino"] == input_name):
+        viz.add(row["destino"])
         viz.add(row["origem"])
       else:
         continue
-    if (len(viz) > 0):
-      viz.add(input_name)
     return viz
 
   def conexidadeNotDigrafo(self): 
