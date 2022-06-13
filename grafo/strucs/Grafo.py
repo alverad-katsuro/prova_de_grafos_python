@@ -41,6 +41,8 @@ class Grafo():
       if ((row["origem"] == input_name) and (not pd.isnull(row["destino"]))):
         viz.add(row["origem"])
         viz.add(row["destino"])
+      elif ((row["origem"] == input_name) and (pd.isnull(row["destino"]))):
+        viz.add(row["origem"])
       elif (row["destino"] == input_name):
         viz.add(row["origem"])
       else:
@@ -54,6 +56,8 @@ class Grafo():
       if ((row["origem"] == input_name) and (not pd.isnull(row["destino"]))):
         viz.add(row["origem"])
         viz.add(row["destino"])
+      elif ((row["origem"] == input_name) and (pd.isnull(row["destino"]))):
+        viz.add(row["origem"])
       else:
         continue
     return viz
