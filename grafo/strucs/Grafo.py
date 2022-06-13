@@ -70,7 +70,9 @@ class Grafo():
         viz.add(row["destino"])
         viz.add(row["origem"])
       else:
-        continue
+        if (row["origem"] == input_name):
+          viz.add(row["origem"])
+          continue
     return viz
 
   def conexidadeNotDigrafo(self): 
