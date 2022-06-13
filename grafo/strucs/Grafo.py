@@ -36,7 +36,7 @@ class Grafo():
 
   def calcVizinhoGeneric(self, input_name): 
     #Requisito 3: Informar a adjacencia de um vértice (Not Digrafo).
-    viz = {}
+    viz = set()
     for _, row in self.dataframe.iterrows():
       if (row["origem"] == input_name):
         viz.add(row["destino"])
@@ -45,19 +45,19 @@ class Grafo():
       else:
         continue
     if (len(viz) > 0):
-      viz.append(input_name)
+      viz.add(input_name)
     return viz
 
   def calcVizinhoSucessor(self, input_name): 
     #Requisito 3: Informar a adjacencia de um vertice (Digrafo)
-    viz = {}
+    viz = set()
     for _, row in self.dataframe.iterrows():
       if (row["origem"] == input_name):
         viz.add(row["destino"])
       else:
         continue
     if (len(viz) > 0):
-      viz.append(input_name)
+      viz.add(input_name)
     return viz
 
   def calcVizinhoAntecessor(self, input_name): 
@@ -72,7 +72,7 @@ class Grafo():
         else:
           continue
       if (len(viz) > 0):
-        viz.append(input_name)
+        viz.add(input_name)
       return viz
 
  def conexidadeNotDigrafo(self): 
