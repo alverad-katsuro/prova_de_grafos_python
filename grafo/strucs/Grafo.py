@@ -75,7 +75,7 @@ class Grafo():
         viz.add(input_name)
       return viz
 
- def conexidadeNotDigrafo(self): 
+  def conexidadeNotDigrafo(self): 
     #4. Verificar se um grafo não-orientado é conexo.
     if (self.digrafo == False):
       vertices = []
