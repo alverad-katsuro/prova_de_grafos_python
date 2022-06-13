@@ -75,18 +75,28 @@ class Grafo():
         viz.append(input_name)
       return viz
 
-  def conexidadeNotDigrafo(self): 
-    #4. Verificar se um grafo não-orientado é conexo.
+ def conexidadeNotDigrafo(self): 
+    #4. Verificar se um grafo não-orientado é conexo. (ERRADO)
     if (self.digrafo == False):
-      vertices_conexo = set()
-      vertices_desconexo = set()
-      for _, row in self.dataframe.iterrows():
-        if not (pd.isnull(row["destino"])):
-          vertices_conexo.add(row["origem"])
-          vertices_conexo.add(row["destino"])
-        else:
-          vertices_desconexo.add(row["origem"])
-      return True if vertices_conexo.issuperset(vertices_desconexo) else False  
+      vertices = []
+      goTo = []
+      subset = self.dataframe.drop_duplicates(subset=["origem", "destino"], keep='first')
+      for _, row in subset.iterrows():
+        if row["origem"] not in vertices:
+          vertices.append(row["origem"])
+        if ((not pd.isnull(row["destino"])) and (row["destino"] not in vertices)):
+          vertices.append(row["destino"])
+      for loop in range(0, len(vertices)):
+        goTo2 = set()  
+        for _, row in subset.iterrows():
+          if ((vertices[loop] == row["origem"]) and (not pd.isnull(row["destino"]))):
+            goTo2.add(row["destino"])
+        goTo.append(goTo2)  
+      for i in range(0, len(goTo)): 
+        for j in range(i+1, len(goTo)):
+          if (len(goTo[i].intersection(goTo[j])) != 0):
+            return True
+      return False
       
 
   def buscaProfundidade(self):
