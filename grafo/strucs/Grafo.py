@@ -30,15 +30,15 @@ class Grafo():
   def calcAdjacencia(self, input_name): 
     #Requisito 3: Informar a adjacencia de um vertice.
     if (self.digrafo == True):
-      return (self.calcVizinhoSucessor(input_name), self.calcVizinhoAntecessor(input_name))
+      return (self.__calcVizinhoSucessor(input_name), self.__calcVizinhoAntecessor(input_name))
     else:
-      return self.calcVizinhoGeneric(input_name)
+      return self.__calcVizinhoGeneric(input_name)
 
-  def calcVizinhoGeneric(self, input_name): 
+  def __calcVizinhoGeneric(self, input_name): 
     #Requisito 3: Informar a adjacencia de um vértice (Not Digrafo).
     viz = set()
     for _, row in self.dataframe.iterrows():
-      if (row["origem"] == input_name):
+      if ((row["origem"] == input_name) and (not pd.isnull(row["destino"]))):
         viz.add(row["destino"])
       elif (row["destino"] == input_name):
         viz.add(row["origem"])
@@ -48,11 +48,11 @@ class Grafo():
       viz.add(input_name)
     return viz
 
-  def calcVizinhoSucessor(self, input_name): 
+  def __calcVizinhoSucessor(self, input_name): 
     #Requisito 3: Informar a adjacencia de um vertice (Digrafo)
     viz = set()
     for _, row in self.dataframe.iterrows():
-      if (row["origem"] == input_name):
+      if ((row["origem"] == input_name) and (not pd.isnull(row["destino"]))):
         viz.add(row["destino"])
       else:
         continue
@@ -60,20 +60,17 @@ class Grafo():
       viz.add(input_name)
     return viz
 
-  def calcVizinhoAntecessor(self, input_name): 
+  def __calcVizinhoAntecessor(self, input_name): 
     #Requisito 3: Informar a adjacencia de um vertice. (Digrafo)
-    if (self.digrafo == True):
-      return (self.calcVizinhoSucessor(input_name), self.calcVizinhoAntecessor(input_name))
-    else:
-      viz = set()
-      for _, row in self.dataframe.iterrows():
-        if (row["destino"] == input_name):
-          viz.add(row["origem"])
-        else:
-          continue
-      if (len(viz) > 0):
-        viz.add(input_name)
-      return viz
+    viz = set()
+    for _, row in self.dataframe.iterrows():
+      if (row["destino"] == input_name):
+        viz.add(row["origem"])
+      else:
+        continue
+    if (len(viz) > 0):
+      viz.add(input_name)
+    return viz
 
   def conexidadeNotDigrafo(self): 
     #4. Verificar se um grafo não-orientado é conexo.
