@@ -4,6 +4,15 @@ import pandas as pd
 
 
 grafo = Grafo()
-grafo.createDataFrame("R0 R1 155 0\nR3 R1 155 1")
-grafo.createImg()
+grafo.createDataFrame("R0")
+print(grafo.calcAdjacencia("R0"))
 
+grafo = Grafo()
+grafo.createDataFrame("R1")
+print(grafo.calcAdjacencia("R0"))
+#### invez de return set() coloca um texto bonito tipo Não há
+
+grafo = Grafo()
+grafo.digrafo = True
+grafo.createDataFrame("R0")
+print(grafo.calcAdjacencia("R0"))
