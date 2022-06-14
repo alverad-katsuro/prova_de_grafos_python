@@ -30,6 +30,8 @@ def index(request):
       pass
     if "botao_grafo_nori_conexo" in request.POST:
       pass
+    if "botao_veri_digra_frac_conexo" in request.POST:
+      pass
     if "botao_veri_digra_uni_conexo" in request.POST:
       pass
     if "botao_di_fort_conex" in request.POST:
