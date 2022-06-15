@@ -2,3 +2,4 @@
 grafo/static/images/grafo.png
 grafo/static/images/grafo
 *.log
+*.cpython-*.pyc
