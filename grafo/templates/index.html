@@ -28,6 +28,9 @@
           {% endif %}
       </div>
       <!-- Col -->
+      <form class="px-8 pt-6 pb-8 mb-4 bg-white rounded" method="post" action="/">
+        {% csrf_token %}
+
         <div class="w-full lg:w-1/2 bg-white p-5 rounded-lg lg:rounded-l-none">
 
           <div class="md:flex md:mt-8 md:-mx-4">
@@ -173,24 +176,25 @@
       </div>
     </div>
 
-    <!-- Row -->
-    <div class="justify-center px-6 my-12">
-      <div class="form-check">
-        <label class="form-check-label inline-block text-gray-800" for="flexCheckChecked">
-          Digrafo?  -> 
-        </label>
-        {{form.digrafo}}
+      <!-- Row -->
+      <div class="justify-center px-6 my-12">
+        <div class="form-check">
+          <label class="form-check-label inline-block text-gray-800" for="flexCheckChecked">
+            Digrafo?  -> 
+          </label>
+          {{form.digrafo}}
+        </div>
+        <div class="mb-4">
+          <label class="block mb-2 text-sm font-bold text-gray-700">
+            Insira o Grafo
+          </label>
+          {{form.grafo_text}}
+          <button type="submit" name="botao_cria_grafo" class="w-full py-2 mt-2 font-bold text-white bg-blue-500 rounded-full hover:bg-blue-700 focus:outline-none focus:shadow-outline">
+            Criar Grafo
+          </button>
+        </div>
       </div>
-      <div class="mb-4">
-        <label class="block mb-2 text-sm font-bold text-gray-700">
-          Insira o Grafo
-        </label>
-        {{form.grafo_text}}
-        <button type="submit" name="botao_cria_grafo" class="w-full py-2 mt-2 font-bold text-white bg-blue-500 rounded-full hover:bg-blue-700 focus:outline-none focus:shadow-outline">
-          Criar Grafo
-        </button>
-      </div>
-    </div>
+  </form>
 
     <!-- Row -->
     <div class="flex justify-center px-6 my-12">
