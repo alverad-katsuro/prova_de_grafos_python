@@ -10,10 +10,30 @@ class Grafo():
     self.log = []
     self.imagem_bin = None
 
-  def hasAresta(self): 
+  def containsAresta(self, *args):
+    if len(args) == 0:
+      return self.__hasAresta1()
+    elif len(args) == 1 and isinstance(args[0], str):
+      return self.__hasAresta2(args[0])
+    elif len(args) == 2 and isinstance(args[0], str) and isinstance(args[1], str):
+      return self.__hasAresta3(args[0], args[1])
+    else:
+      pass
+
+  def __hasAresta1(self): 
     #Requisito 1: Verificar a existencia de uma aresta.
     return False if (self.dataframe["destino"].isnull().values.all()) else True
 
+  def __hasAresta2(self, inp1): 
+    #Requisito 1: Verificar a existencia de uma aresta em determinado vertice.
+    return True if (self.calcGrau(inp1) > 0) else False
+
+  def __hasAresta3(self, inp1, inp2): 
+    #Requisito 1: Verificar a existencia de uma aresta entre dois vertices.
+    for _, row in self.dataframe.iterrows():
+      if (((row["origem"] == inp1) and (row["destino"] == inp2)) or ((row["origem"] == inp2) and (row["destino"] == inp1))):
+        return True
+    return False
   def calcGrau(self, input_name): 
     #Requisito 2: Informar o grau de um vertice.
     grau = 0
@@ -92,6 +112,7 @@ class Grafo():
           if ((vertices[loop] == row["origem"]) and (not pd.isnull(row["destino"]))):
             goTo2.add(row["destino"])
         goTo.append(goTo2)  
+        print(self.calcAdjacencia(vertices[loop]), goTo2)
       for i in range(0, len(goTo)): 
         for j in range(i+1, len(goTo)):
           if (len(goTo[i].intersection(goTo[j])) != 0):

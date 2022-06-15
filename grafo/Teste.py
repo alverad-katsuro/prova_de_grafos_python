@@ -4,15 +4,7 @@ import pandas as pd
 
 
 grafo = Grafo()
-grafo.createDataFrame("R0")
-print(grafo.calcAdjacencia("R0"))
+grafo.createDataFrame("R0 R1\nR1 R2\nR2 R1")
 
-grafo = Grafo()
-grafo.createDataFrame("R1")
-print(grafo.calcAdjacencia("R0"))
-#### invez de return set() coloca um texto bonito tipo Não há
-
-grafo = Grafo()
-grafo.digrafo = True
-grafo.createDataFrame("R0")
-print(grafo.calcAdjacencia("R0"))
+print(grafo.containsAresta("R3", "R0"))
+#print(grafo.conexidadeNotDigrafo())
