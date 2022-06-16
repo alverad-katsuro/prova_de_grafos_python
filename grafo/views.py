@@ -25,7 +25,7 @@ def index(request):
     if "botao_verifica_aresta" in request.POST:
       pass
     if "botao_verifica_grau" in request.POST:
-      pass
+      grafo.log.append(f"O Grau do Vertice {request.POST.get('vertice_grau')} é: {grafo.calcGrau(request.POST.get('vertice_grau'))}")
     if "botao_verifica_adj" in request.POST:
       pass
     if "botao_grafo_nori_conexo" in request.POST:
@@ -51,6 +51,7 @@ def index(request):
     form.fields["grafo_text"].initial = request.POST.get('grafo_text')
     form.fields["digrafo"].initial = request.POST.get('digrafo')
     context['form'] = form
+    context['grafo'] = grafo
   else:
     context = {
         'form': form,

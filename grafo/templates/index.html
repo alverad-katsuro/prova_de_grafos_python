@@ -43,9 +43,9 @@
               </div>
             </div>
             <div class="w-full md:mx-4 rounded-md bg-cover bg-center">
-              <div class="bg-opacity-50 flex items-center h-full group relative">
-                  <div class="flex-grow w-full">
-                    <input type="text" class="form-control block px-3 py-1.5 text-base font-normal text-gray-700 bg-white bg-clip-padding border border-solid border-gray-300 rounded transition ease-in-out m-0 focus:text-gray-700 focus:bg-white focus:border-blue-600  focus:outline-none" name="vertice_aresta" id="id_vertice_aresta" placeholder="R0 R1"/>    
+              <div class="bg-opacity-50 flex items-center h-full relative">
+                  <div class="flex">
+                    <input type="text" class="flex form-control px-3 py-1.5 text-base font-normal text-gray-700 bg-white bg-clip-padding border border-solid border-gray-300 rounded transition ease-in-out m-0 focus:text-gray-700 focus:bg-white focus:border-blue-600  focus:outline-none" name="vertice_aresta" id="id_vertice_aresta" placeholder="R0 R1"/>    
                   </div>
               </div>
             </div>
@@ -214,7 +214,9 @@
           </div>
           <div class="pl-1 pt-1 h-auto  text-green-200 font-mono text-xs bg-black" id="console">
             <p class="pb-1">Last login: 09 jun 2022 on ttys001</p>
-            <p class="pb-1">Alverad:Devprojects grafos_end$</p>
+            {% for log in grafo.log %}
+              <p class="pb-1">Alverad:Devprojects grafos_end$ {{ log }}</p>
+            {% endfor %}
           </div>
         </div> 
       </div>
