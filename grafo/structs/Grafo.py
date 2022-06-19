@@ -458,11 +458,7 @@ class Grafo():
 
         Correspondente ao requisito 9.
         """        
-<<<<<<< HEAD
-        if self.digrafo and not self.buscaProfundidade001(identify_cycle=True):
-=======
-        if self.digrafo:# and self.conexidadeGrafo() and not self.buscaProfundidade001(identify_cycle=True):
->>>>>>> 19dd260c51f0487fa852433eb7cb222cba2843cc
+        if self.digrafo and not self.buscaProfundidade001(identify_cycle=True): #not verifying conexidade
           list_order = self.buscaProfundidade001()
           print(list_order)
           novo_grafo = Grafo()
