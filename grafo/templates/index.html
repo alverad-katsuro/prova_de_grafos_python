@@ -1,16 +1,6 @@
-{% load static tailwind_tags %}
-<!DOCTYPE html>
-<html lang="en">
-	<head>
-    <title>Django Tailwind</title>
-		<meta charset="UTF-8">
-		<meta name="viewport" content="width=device-width, initial-scale=1.0">
-		<meta http-equiv="X-UA-Compatible" content="ie=edge">
-		{% tailwind_css %}
-	</head>
+{% extends "_base.html" %}
+{% block content %}
 
-<!-- component -->
-<body class="font-mono bg-white-400">
   <!-- Container -->
   <div class="container mx-auto">
     
@@ -23,7 +13,7 @@
           {% if image != None %}
           <img src="data:image/png;base64,{{image}}" class="max-w-full h-auto bg-white border rounded my-auto"/>
           {% else %}
-          <img src="{% static 'images/initial.jpeg' %}" class="max-w-full h-auto block w-full p-1 bg-white border rounded"/>
+          <img src="static/images/initial.jpeg" class="max-w-full h-auto block w-full p-1 bg-white border rounded"/>
           {% endif %}
       </div>
       <!-- Col -->
@@ -223,5 +213,5 @@
     </div> 
 
     </div>
-	</body>
-</html>
+
+{% endblock content %}
