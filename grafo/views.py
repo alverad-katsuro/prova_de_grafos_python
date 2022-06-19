@@ -46,13 +46,15 @@ def index(request):
     if "botao_graf_ciclo?" in request.POST:
       grafo.log.append(f"O grafo possui ciclo?: {grafo.hasCiclo()}")
     if "botao_dig_aci_cone_ord_top" in request.POST:
+      grafo.log.append(f"Calculando ordenação Topologica")
       grafo.ordenacaoTopologica()
     if "botao_veri_planar_2-con_eule" in request.POST:
       pass
     if "botao_caminho_curto_custo" in request.POST:
       pass
     if "botao_arv_min" in request.POST:
-      pass
+      grafo.log.append(f"Calculando arvore geradora minima")
+      grafo.AGM()
     if grafo.imagem_bin != None:
       context["image"] = b64encode(grafo.imagem_bin).decode()
     form.fields["grafo_text"].initial = request.POST.get('grafo_text')

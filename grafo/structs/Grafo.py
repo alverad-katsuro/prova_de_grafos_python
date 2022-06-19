@@ -19,7 +19,7 @@ class Grafo():
         self.dataframe = pd.DataFrame(columns=["origem", "destino", "label", "cluster"])
         self.digrafo = digrafo
         self.log = []
-        self.imagem_bin = None
+        self.imagem_bin = {}
 
 
     def getVertices(self):
@@ -245,7 +245,8 @@ class Grafo():
 
     def hasCiclo(self):
         """Verifica se um grafo possui algum ciclo.
-            
+            Requisito 8
+
         Returns:
           Verdadeiro, caso possua ciclo; Falso, caso não possua ciclo.
         """
@@ -456,10 +457,14 @@ class Grafo():
 
         Correspondente ao requisito 9.
         """        
-        if self.digrafo and self.conexidadeGrafo() and self.buscaProfundidade001(identify_cycle=True):
+        if self.digrafo:# and self.conexidadeGrafo() and not self.buscaProfundidade001(identify_cycle=True):
           list_order = self.buscaProfundidade001()
           print(list_order)
-          self.createImg(ordering=list_order)
+          novo_grafo = Grafo()
+          novo_grafo.dataframe = self.dataframe
+          novo_grafo.createImg(ordering=list_order)
+          self.imagem_bin["topologica"] = novo_grafo.imagem_bin
+
 
     def AGM(self): 
         """Calcula a Árvore Geradora Mínima de um Grafo não-orientado e conexo, utilizando do
@@ -489,6 +494,7 @@ class Grafo():
           #print(text)
           #second_dataframe.createDataFrame(text)
           second_dataframe.createImg()
+          self.imagem_bin["agm"] = second_dataframe.imagem_bin
 
     def __createAresta(self, origem, destino=np.nan, label=np.nan, cluster=np.nan):
         """Cria as linhas do DataFrame.        
@@ -564,7 +570,7 @@ class Grafo():
               for _, row in df.iterrows():
                 c.edge(row.origem, row.destino, label=str(row.label))
           grafo.render("grafo/static/images/grafo_com_sub_grafos")
-          self.imagem_bin = grafo._repr_image_png()
+          self.imagem_bin["grafo"] = grafo._repr_image_png()
         else:
           for _, row in self.dataframe.iterrows():
             verdade = row.isnull()
@@ -576,6 +582,6 @@ class Grafo():
             else:
               grafo.node(row.origem)
           grafo.render("grafo/static/images/grafo", overwrite_source=True)
-          self.imagem_bin = grafo._repr_image_png()
+          self.imagem_bin["grafo"] = grafo._repr_image_png()
 
 
