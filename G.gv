@@ -1,5 +1,0 @@
-digraph G {
-	rankdir=LR shape=circle size="8,5"
-	R0 -> R1 [label=15]
-	R2 -> R3 [label=10]
-}

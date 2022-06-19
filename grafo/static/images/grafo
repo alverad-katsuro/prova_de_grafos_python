@@ -1,16 +1,8 @@
-graph G {
+digraph G {
 	rankdir=LR shape=circle size="8,5"
-<<<<<<< HEAD
-	2
-=======
-	k0 -- k4 [label=1]
-	k0 -- k5 [label=1]
-	k0 -- k6 [label=1]
-	k1 -- k4 [label=1]
-	k1 -- k5 [label=1]
-	k1 -- k6 [label=1]
-	k2 -- k4 [label=1]
-	k2 -- k5 [label=1]
-	k2 -- k6 [label=1]
->>>>>>> c2ee27957b438cb543062063c969489470fee320
+	R3 -> R5 [label=10]
+	R4 -> R3 [label=11]
+	R4 -> R5 [label=112]
+	R9 -> R4 [label=15]
+	R5 -> R9 [label=1]
 }
