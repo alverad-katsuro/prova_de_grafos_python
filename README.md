@@ -15,7 +15,7 @@ o que faz com que seja possível a disposição dos grafos resultantes de forma 
  As dependências necessárias para a execução de todo o projeto são as seguintes dependências:
   - Django;
   - Pandas;
-  - Graphviz;
+  - Graphviz (source)/ o do python é so uma interface para systemcalls;
   - Python 3.8 ou superior;
    
   Pelo fato de essas dependências estarem reunidas em um arquivo denominado _requirements.txt_,

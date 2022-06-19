@@ -1,4 +1,16 @@
 graph G {
 	rankdir=LR shape=circle size="8,5"
+<<<<<<< HEAD
 	2
+=======
+	k0 -- k4 [label=1]
+	k0 -- k5 [label=1]
+	k0 -- k6 [label=1]
+	k1 -- k4 [label=1]
+	k1 -- k5 [label=1]
+	k1 -- k6 [label=1]
+	k2 -- k4 [label=1]
+	k2 -- k5 [label=1]
+	k2 -- k6 [label=1]
+>>>>>>> c2ee27957b438cb543062063c969489470fee320
 }

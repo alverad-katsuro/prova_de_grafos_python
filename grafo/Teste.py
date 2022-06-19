@@ -1,4 +1,4 @@
-from strucs.Grafo import Grafo as Grafo
+from strutcs.Grafo import Grafo as Grafo
 import numpy as np
 import pandas as pd
 
