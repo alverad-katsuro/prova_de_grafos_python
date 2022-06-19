@@ -4,7 +4,6 @@ from django.http import HttpResponse
 import pandas as pd
 from .forms import GrafoForm
 from grafo.structs.Grafo import Grafo
-from base64 import b64encode
 
 grafo = Grafo()
 
@@ -55,8 +54,8 @@ def index(request):
     if "botao_arv_min" in request.POST:
       grafo.log.append(f"Calculando arvore geradora minima")
       grafo.AGM()
-    if grafo.imagem_bin != None:
-      context["image"] = b64encode(grafo.imagem_bin).decode()
+    if len(grafo.imagem_bin) != 0:
+      context["image"] = grafo.imagem_bin['grafo']
     form.fields["grafo_text"].initial = request.POST.get('grafo_text')
     form.fields["digrafo"].initial = request.POST.get('digrafo')
     context['form'] = form
@@ -64,6 +63,7 @@ def index(request):
   else:
     context = {
         'form': form,
+        'image': None,
     }
 
   return render(request, "index.html", context)

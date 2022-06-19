@@ -1,5 +1,6 @@
 import numpy as np
 import pandas as pd
+from base64 import b64encode
 
 from graphviz import Digraph, Graph
 
@@ -463,7 +464,8 @@ class Grafo():
           novo_grafo = Grafo()
           novo_grafo.dataframe = self.dataframe
           novo_grafo.createImg(ordering=list_order)
-          self.imagem_bin["topologica"] = novo_grafo.imagem_bin
+          self.imagem_bin["topologica"] = b64encode(novo_grafo.imagem_bin).decode()
+
 
 
     def AGM(self): 
@@ -494,7 +496,8 @@ class Grafo():
           #print(text)
           #second_dataframe.createDataFrame(text)
           second_dataframe.createImg()
-          self.imagem_bin["agm"] = second_dataframe.imagem_bin
+          self.imagem_bin["agm"] = b64encode(second_dataframe.imagem_bin).decode()
+
 
     def __createAresta(self, origem, destino=np.nan, label=np.nan, cluster=np.nan):
         """Cria as linhas do DataFrame.        
@@ -570,7 +573,7 @@ class Grafo():
               for _, row in df.iterrows():
                 c.edge(row.origem, row.destino, label=str(row.label))
           grafo.render("grafo/static/images/grafo_com_sub_grafos")
-          self.imagem_bin["grafo"] = grafo._repr_image_png()
+          self.imagem_bin["grafo"] = b64encode(grafo._repr_image_png()).decode()
         else:
           for _, row in self.dataframe.iterrows():
             verdade = row.isnull()
@@ -582,6 +585,7 @@ class Grafo():
             else:
               grafo.node(row.origem)
           grafo.render("grafo/static/images/grafo", overwrite_source=True)
-          self.imagem_bin["grafo"] = grafo._repr_image_png()
+          self.imagem_bin["grafo"] = b64encode(grafo._repr_image_png()).decode()
+          
 
 
