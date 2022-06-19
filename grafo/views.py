@@ -67,3 +67,6 @@ def index(request):
     }
 
   return render(request, "index.html", context)
+
+def teste(request):
+  return render(request, "teste.html")
