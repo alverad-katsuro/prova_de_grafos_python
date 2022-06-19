@@ -12,9 +12,9 @@ class Grafo():
           label, que é o valor da aresta que sai de um vértice e vai para outro vértica;
           cluster, que é um subconjunto de vértices que podem ser formados em um único grafo;
           
-          Args:
-            digrafo (bool): Valor booleano que define a orientação do grafo: orientado,
-            caso Verdadeiro; não-orientado, caso Falso.
+        Args:
+          digrafo (bool): Valor booleano que define a orientação do grafo. 
+          Orientado, caso Verdadeiro; Não-orientado, caso Falso.
         """
         self.dataframe = pd.DataFrame(columns=["origem", "destino", "label", "cluster"])
         self.digrafo = digrafo
@@ -36,6 +36,21 @@ class Grafo():
         return vertices
 
     def containsAresta(self, *args):
+        """Verifica a existência de uma aresta no grafo: caso possua em um grafo,
+        em um vértice do grafo ou entre dois vértices em específico.
+        
+        Correspondente ao requisito 1.
+          
+        Args:
+          *args: caso *args possua nenhum argumento, verifica a existência de uma aresta
+          no grafo; caso possua um argumento, que deve ser o nome de um vértice,
+          verifica a existência de uma aresta no vértice inserido; caso possua
+          dois argumentos, que devem ser o nome de dois vértices, verifica a existência
+          de uma aresta entre esses dois vértices.
+            
+        Returns:
+          Verdadeiro, caso a aresta exista; Falso, caso não exista.
+        """
         if len(args) == 0:
           return self.__hasAresta1()
         elif len(args) == 1 and isinstance(args[0], str):
@@ -59,7 +74,16 @@ class Grafo():
           return False
 
     def calcGrau(self, input_name): 
-        #Requisito 2: Informar o grau de um vertice.
+        """Calcula o grau de um vértice de um grafo orientado ou não-orientado.
+        
+        Correspondente ao requisito 2.
+          
+        Args:
+          input_name (String): nome do vértice que se deseja calcular o grau.
+            
+        Returns:
+          O grau do vértice em questão.
+        """
         grau = 0
         for _, row in self.dataframe.iterrows():
           if ((row["origem"] == input_name) or (row["destino"] == input_name)):
@@ -71,15 +95,42 @@ class Grafo():
             continue
         return grau
 
-    def calcAdjacencia(self, input_name): 
-        #Requisito 3: Informar a adjacencia de um vertice.
-        if (self.digrafo):
+    def calcAdjacencia(self, input_name, sucessor=False): 
+        """Calcula a adjacência de um vértice de um grafo orientado ou não-orientado.
+        
+        Correspondente ao requisito 3.
+          
+        Args:
+          input_name (String): nome do vértice que se deseja calcular a adjacência.
+          sucessor (bool): caso Verdadeiro, retorna apenas a adjacência superior do
+          grafo orientado; caso Falso, retorna a adjacência superior e inferior do
+          grafo orientado.
+            
+        Returns:
+          caso orientado e com sucessor=True, a adjacência superior do vértice;
+          caso orientado e com sucessor=False, uma tupla com a adjacência superior
+          e inferior do vértice;
+          caso não-orientado, a adjacência do vértice, que inclui a superior e a 
+          inferior.
+        """
+        if self.digrafo:
+          if sucessor:
+            return self.__calcVizinhoSucessor(input_name)
           return (self.__calcVizinhoSucessor(input_name), self.__calcVizinhoAntecessor(input_name))
         else:
           return self.__calcVizinhoGeneric(input_name)
 
     def __calcVizinhoGeneric(self, input_name): 
-        #Requisito 3: Informar a adjacencia de um vértice (Not Digrafo).
+        """Calcula a adjacência de um vértice de um grafo não-orientado.
+        
+        Correspondente ao requisito 3.
+          
+        Args:
+          input_name (String): nome do vértice que se deseja calcular a adjacência.
+            
+        Returns:
+          A adjacência do vértice, que inclui a superior e a inferior.
+        """
         viz = set()
         for _, row in self.dataframe.iterrows():
           if ((row["origem"] == input_name) and (not pd.isnull(row["destino"]))):
@@ -95,7 +146,16 @@ class Grafo():
         return viz
 
     def __calcVizinhoSucessor(self, input_name): 
-        #Requisito 3: Informar a adjacencia de um vertice (Digrafo)
+        """Calcula a adjacência superior de um vértice de um grafo orientado.
+        
+        Correspondente ao requisito 3.
+          
+        Args:
+          input_name (String): nome do vértice que se deseja calcular a adjacência.
+            
+        Returns:
+          A adjacência superior do vértice;
+        """
         viz = set()
         for _, row in self.dataframe.iterrows():
           if ((row["origem"] == input_name) and (not pd.isnull(row["destino"]))):
@@ -108,7 +168,16 @@ class Grafo():
         return viz
 
     def __calcVizinhoAntecessor(self, input_name): 
-        #Requisito 3: Informar a adjacencia de um vertice. (Digrafo)
+        """Calcula a adjacência inferior de um vértice de um grafo orientado.
+        
+        Correspondente ao requisito 3.
+          
+        Args:
+          input_name (String): nome do vértice que se deseja calcular a adjacência.
+            
+        Returns:
+          A adjacência inferior do vértice;
+        """
         viz = set()
         for _, row in self.dataframe.iterrows():
           if (row["destino"] == input_name):
@@ -120,9 +189,38 @@ class Grafo():
               continue
         return viz
 
-    def conexidadeNotDigrafo(self): 
-        #4. Verificar se um grafo não-orientado é conexo.
-        if (self.digrafo == False):
+    def conexidadeGrafo(self, force=False): 
+        """Verifica se um grafo é conexo ou desconexo, e caso seja 
+           um grafo orientado, pode verificar a força do grafo.
+           
+        Correspondente ao requisito 4, e à parte do requisito 5, 6, 7.
+          
+        Args:
+          force (bool): caso Verdadeiro, se for passado um grafo orientado, 
+          calcula a força do mesmo (fortemente conexo, unilateralmente conexo, 
+          fracamente conexo, desconexo); caso Falso, para grafos orientados e
+          não-orientados, retorna se o grafo é conexo ou desconexo.
+            
+        Returns:
+          caso orientado e com force=True, retorna se o grafo é fortemente conexo,
+          unilateralmente conexo ou fracamente conexo;
+          caso orientado e com force=False, retorna se o grafo é conexo ou desconexo;
+          caso não-orientado, retorna se o grafo é conexo ou desconexo.
+        """
+        if self.digrafo:
+          if force:
+            pass
+          pass
+        else:
+          return self.__conexidadeNotDigrafo()
+
+    def __conexidadeNotDigrafo(self): 
+        """Verifica se um grafo não-orientado é conexo ou desconexo.
+            
+        Returns:
+          Verdadeiro, se o grafo for conexo; Falso, se o grafo for desconexo.
+        """
+        if (self.digrafo == False): #!Bug. A ordem em que os vértices estão dispostos podem enganar o algoritmo
             vertices = []
             goTo = []
             subset = self.dataframe.drop_duplicates(subset=["origem", "destino"], keep='first')
@@ -138,6 +236,7 @@ class Grafo():
                   goTo2.add(row["destino"])
               goTo.append(goTo2)  
               print(self.calcAdjacencia(vertices[loop]), goTo2)
+            print(goTo)
             for i in range(0, len(goTo)): 
               for j in range(i+1, len(goTo)):
                 if (len(goTo[i].intersection(goTo[j])) != 0):
@@ -145,6 +244,11 @@ class Grafo():
             return False
 
     def hasCiclo(self):
+        """Verifica se um grafo possui algum ciclo.
+            
+        Returns:
+          Verdadeiro, caso possua ciclo; Falso, caso não possua ciclo.
+        """
         if self.digrafo:
           return self.buscaProfundidade001(identify_cycle=True)
         else:
@@ -152,6 +256,19 @@ class Grafo():
         
 
     def buscaProfundidade001(self, identify_cycle=False):
+        """Verifica se um grafo (orientado) possui algum ciclo através de 
+        uma busca em profundidade. Por utilizar um conjunto, a ordem dos elementos 
+        não é preservada, o que faz com que cada execução do código possa retornar 
+        uma ordem diferente de outra execução, apesar que correta.
+            
+        Args:
+          identify_cycle (bool): caso Verdadeiro, o algoritmo visa identificar a 
+          existência de ciclo; caso Falso, o algoritmo visa encontrar a ordem de 
+          saturação dos vértices.
+        Returns:
+          Ordem crescente em que os vértices são saturados, caso identify_cycle=False;
+          Existência de ciclo, caso identify_cycle=True.
+        """
       # conjunto_vertices = self.getVertices() - used
         #print(conjunto_vertices)
         #print(used,'\n')
@@ -231,6 +348,19 @@ class Grafo():
               # conjunto_vertices.remove(element1)
 
     def buscaProfundidade002(self, identify_cycle=False):
+        """Verifica se um grafo (não-orientado) possui algum ciclo através de 
+        uma busca em profundidade. Por utilizar um conjunto, a ordem dos elementos 
+        não é preservada, o que faz com que cada execução do código possa retornar 
+        uma ordem diferente de outra execução, apesar que correta.
+            
+        Args:
+          identify_cycle (bool): caso Verdadeiro, o algoritmo visa identificar a 
+          existência de ciclo; caso Falso, o algoritmo visa encontrar a ordem de 
+          saturação dos vértices.
+        Returns:
+          Ordem crescente em que os vértices são saturados, caso identify_cycle=False;
+          Existência de ciclo, caso identify_cycle=True.
+        """
         # conjunto_vertices = self.getVertices() - used
         #print(conjunto_vertices)
         #print(used,'\n')
@@ -321,9 +451,12 @@ class Grafo():
           return done
 
     def ordenacaoTopologica(self): 
-        #Requisito 9: Dado um dı́grafo acı́clico e conexo, informar uma ordenação topológica presente no dı́grafo
-        if self.digrafo:
+        """Calcula a ordenação topológica de um grafo orientado, acíclico e conexo,
+        e gera a imagem do mesmo.
 
+        Correspondente ao requisito 9.
+        """        
+        if self.digrafo and self.conexidadeGrafo() and self.buscaProfundidade001(identify_cycle=True):
           list_order = self.buscaProfundidade001()
           print(list_order)
           self.createImg(ordering=list_order)
@@ -357,7 +490,15 @@ class Grafo():
           #second_dataframe.createDataFrame(text)
           second_dataframe.createImg()
 
-    def createAresta(self, origem, destino=np.nan, label=np.nan, cluster=np.nan):
+    def __createAresta(self, origem, destino=np.nan, label=np.nan, cluster=np.nan):
+        """Cria as linhas do DataFrame.        
+        Args:
+          origem: vértice inicial, requisito mínimo para geração de um grafo;
+          destino: vértice final, criando uma aresta da origem até o destino caso
+          passada como argumento;
+          label: label da aresta, podendo conter o peso e o custo formatados;
+          cluster: subgrafo organizado em grupo.
+        """      
         if len(self.dataframe.query("(origem == @origem) & (destino == @destino) & (label == @label) & (cluster == @cluster)")) == 0:
           self.dataframe = pd.concat(
             [self.dataframe, 
@@ -381,13 +522,13 @@ class Grafo():
         for linha in dados:
           lin = linha.split()
           if len(lin) == 4:
-            self.createAresta(lin[0], lin[1], lin[2], lin[3])
+            self.__createAresta(lin[0], lin[1], lin[2], lin[3])
           elif len(lin) == 3:
-            self.createAresta(lin[0], lin[1], lin[2])
+            self.__createAresta(lin[0], lin[1], lin[2])
           elif len(lin) == 2:
-            self.createAresta(lin[0], lin[1])
+            self.__createAresta(lin[0], lin[1])
           elif len(lin) == 1:
-            self.createAresta(lin[0])
+            self.__createAresta(lin[0])
 
     def createImg(self, ordering=[]):
         """Gera a imagem do grafo em questão, mediante escrita do mesmo no arquivo 
