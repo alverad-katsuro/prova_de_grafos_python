@@ -3,7 +3,7 @@ from django.http import HttpResponse
 
 import pandas as pd
 from .forms import GrafoForm
-from grafo.strutcs.Grafo import Grafo
+from grafo.structs.Grafo import Grafo
 from base64 import b64encode
 
 grafo = Grafo()
