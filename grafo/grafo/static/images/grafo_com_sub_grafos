@@ -1,0 +1,15 @@
+graph G {
+	rankdir=LR shape=circle size="8,5"
+	subgraph "cluster nan" {
+		color=yellow label="Componente nan"
+	}
+	subgraph "cluster NaN" {
+		color=pink label="Componente NaN"
+		A -- D [label=5]
+		C -- E [label=5]
+		D -- F [label=6]
+		A -- B [label=7]
+		B -- E [label=7]
+		E -- G [label=9]
+	}
+}
