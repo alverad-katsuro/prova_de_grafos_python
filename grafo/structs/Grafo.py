@@ -305,8 +305,8 @@ class Grafo():
                 used.insert(len(used), element1)
               if element1 in conjunto_vertices:
                 conjunto_vertices.remove(element1)
-
-            adjacencia = self.__calcVizinhoSucessor(element1) - set(element1)
+            print(element1)
+            adjacencia = self.__calcVizinhoSucessor(element1) - set([element1])
             if identify_cycle:
               for element in adjacencia:
                 if (element not in conjunto_vertices) and (element in order):
@@ -456,7 +456,7 @@ class Grafo():
 
         Correspondente ao requisito 9.
         """        
-        if self.digrafo and self.conexidadeGrafo() and self.buscaProfundidade001(identify_cycle=True):
+        if self.digrafo and not self.buscaProfundidade001(identify_cycle=True):
           list_order = self.buscaProfundidade001()
           print(list_order)
           self.createImg(ordering=list_order)
