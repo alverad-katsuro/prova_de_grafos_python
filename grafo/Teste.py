@@ -7,7 +7,7 @@ grafo = Grafo()
 #grafo.createDataFrame("A B 7\nB C 8\nA D 5\nD F 6\nE G 9\n E F 8\n D E 15\n E B 7")
 #grafo.createDataFrame("A B\n B C\n C D\nD A\n D E")
 
-grafo.createDataFrame("A B 7\nB C 8\nA D 5\nB D 9\nD F 6\nF G 11\nE G 9\n E F 8\n D E 15\n B E 7\nC E 5")
+grafo.createDataFrame("A B 7\nB C 8\nA D 5\nB D 9\nD F 6\nF G 11\nE G 9\n E F 8\n D E 15\n B E 7\nC E 5\n")
 #grafo.createDataFrame("A B 7\nB C 8\nA D 5\nD E 8\n B D 0\n")
 
 print(grafo.dataframe)
