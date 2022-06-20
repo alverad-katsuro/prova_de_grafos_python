@@ -2,7 +2,7 @@ from django.test import TestCase
 
 # Create your tests here.
 from cgi import print_form
-from strucs.Grafo import Grafo as Grafo
+from structs.Grafo import Grafo as Grafo
 import numpy as np
 import pandas as pd
 
