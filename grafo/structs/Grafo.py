@@ -74,6 +74,15 @@ class Grafo():
             return True
           return False
 
+    def __hasAresta4(self, inp1, inp2, multiples=False): 
+        #Requisito 1: Verificar a existencia de uma aresta entre dois vertices.
+        if multiples:
+          counter = 0
+          for _, row in self.dataframe.iterrows():
+            if (((row["origem"] == inp1) and (row["destino"] == inp2)) or ((row["origem"] == inp2) and (row["destino"] == inp1))):
+              counter +=1
+          return counter
+
     def calcGrau(self, input_name): 
         """Calcula o grau de um vértice de um grafo orientado ou não-orientado.
         
@@ -225,9 +234,32 @@ class Grafo():
         if self.digrafo:
           return self.buscaProfundidade001(identify_cycle=True)
         else:
+          if self.isMultigrafo():
+            return True
           return self.buscaProfundidade002(identify_cycle=True)
         
+    def isMultigrafo(self):
+        """Verifica se um grafo não-orientado é um multigrafo, ou seja,
+        se possui algum self-loop ou se possui mais que uma ligação entre 
+        dois vértices iguais.
 
+        Returns:
+          Verdadeiro, caso seja multigrafo; Falso, caso não seja um multigrafo.
+        """
+        if not self.digrafo:
+          vertices = list(self.getVertices())
+          for i in range(0, len(vertices)):
+            for j in range(1, len(vertices)):
+              if self.__hasAresta4(vertices[i], vertices[j], multiples=True) > 1:
+                return True
+          for _, row in self.dataframe.iterrows():
+            x1 = row["origem"]
+            x2 = row["destino"]
+            if x1 == x2: #self-loop
+              return True
+ 
+          return False
+    
     def buscaProfundidade001(self, identify_cycle=False):
         """Verifica se um grafo (orientado) possui algum ciclo através de 
         uma busca em profundidade. Por utilizar um conjunto, a ordem dos elementos 
@@ -487,7 +519,7 @@ class Grafo():
     def __createAresta(self, origem, destino=np.nan, label=np.nan, cluster=np.nan):
         """Cria as linhas do DataFrame.        
         Args:
-          origem: vértice inicial, requisito mínimo para geração de um grafo;
+          origem: vértice inicial, requisito mínimo para geração de um grafo; 
           destino: vértice final, criando uma aresta da origem até o destino caso
           passada como argumento;
           label: label da aresta, podendo conter o peso e o custo formatados;
