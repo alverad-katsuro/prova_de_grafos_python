@@ -4,3 +4,4 @@ grafo/static/images/grafo
 *.log
 *.cpython-*.pyc
 */__pychache__/*
+static/CACHE

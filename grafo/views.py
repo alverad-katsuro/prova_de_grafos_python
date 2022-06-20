@@ -55,7 +55,7 @@ def index(request):
       grafo.log.append(f"Calculando arvore geradora minima")
       grafo.AGM()
     if len(grafo.imagem_bin) != 0:
-      context["image"] = grafo.imagem_bin['grafo']
+      context["image"] = grafo.imagem_bin
     form.fields["grafo_text"].initial = request.POST.get('grafo_text')
     form.fields["digrafo"].initial = request.POST.get('digrafo')
     context['form'] = form

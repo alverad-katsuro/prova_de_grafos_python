@@ -1,8 +1,7 @@
 digraph G {
 	rankdir=LR shape=circle size="8,5"
-	R3 -> R5 [label=10]
-	R4 -> R3 [label=11]
-	R4 -> R5 [label=112]
-	R9 -> R4 [label=15]
-	R5 -> R9 [label=1]
+	A -> B [label=7]
+	B -> C [label=8]
+	A -> D [label=5]
+	A -> C [label=9]
 }

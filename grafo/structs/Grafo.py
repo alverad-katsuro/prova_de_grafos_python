@@ -464,7 +464,7 @@ class Grafo():
           novo_grafo = Grafo()
           novo_grafo.dataframe = self.dataframe
           novo_grafo.createImg(ordering=list_order)
-          self.imagem_bin["topologica"] = b64encode(novo_grafo.imagem_bin).decode()
+          self.imagem_bin["topologica"] = novo_grafo.imagem_bin['grafo']
 
 
 
@@ -495,8 +495,12 @@ class Grafo():
           #text = second_dataframe.dataframe[:].to_string(header=False, index=False).replace('NaN', '')
           #print(text)
           #second_dataframe.createDataFrame(text)
-          second_dataframe.createImg()
-          self.imagem_bin["agm"] = b64encode(second_dataframe.imagem_bin).decode()
+          print(len(self.imagem_bin))
+          self.imagem_bin['agm'] = second_dataframe.createImg()
+          print(len(self.imagem_bin))
+          print(self.imagem_bin['agm'] == self.imagem_bin['grafo'])
+          #self.imagem_bin["agm"] = second_dataframe.imagem_bin['grafo']
+          
 
 
     def __createAresta(self, origem, destino=np.nan, label=np.nan, cluster=np.nan):
@@ -574,6 +578,7 @@ class Grafo():
                 c.edge(row.origem, row.destino, label=str(row.label))
           grafo.render("grafo/static/images/grafo_com_sub_grafos")
           self.imagem_bin["grafo"] = b64encode(grafo._repr_image_png()).decode()
+          return self.imagem_bin["grafo"]
         else:
           for _, row in self.dataframe.iterrows():
             verdade = row.isnull()
@@ -586,6 +591,7 @@ class Grafo():
               grafo.node(row.origem)
           grafo.render("grafo/static/images/grafo", overwrite_source=True)
           self.imagem_bin["grafo"] = b64encode(grafo._repr_image_png()).decode()
+          return self.imagem_bin["grafo"]
           
 
 
