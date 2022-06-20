@@ -213,36 +213,7 @@ class Grafo():
             pass
           pass
         else:
-          return self.__conexidadeNotDigrafo()
-
-    def __conexidadeNotDigrafo(self): 
-        """Verifica se um grafo não-orientado é conexo ou desconexo.
-            
-        Returns:
-          Verdadeiro, se o grafo for conexo; Falso, se o grafo for desconexo.
-        """
-        if (self.digrafo == False): #!Bug. A ordem em que os vértices estão dispostos podem enganar o algoritmo
-            vertices = []
-            goTo = []
-            subset = self.dataframe.drop_duplicates(subset=["origem", "destino"], keep='first')
-            for _, row in subset.iterrows():
-              if row["origem"] not in vertices:
-                vertices.append(row["origem"])
-              if ((not pd.isnull(row["destino"])) and (row["destino"] not in vertices)):
-                vertices.append(row["destino"])
-            for loop in range(0, len(vertices)):
-              goTo2 = set()  
-              for _, row in subset.iterrows():
-                if ((vertices[loop] == row["origem"]) and (not pd.isnull(row["destino"]))):
-                  goTo2.add(row["destino"])
-              goTo.append(goTo2)  
-              print(self.calcAdjacencia(vertices[loop]), goTo2)
-            print(goTo)
-            for i in range(0, len(goTo)): 
-              for j in range(i+1, len(goTo)):
-                if (len(goTo[i].intersection(goTo[j])) != 0):
-                  return True
-            return False
+          return self.buscaProfundidade002(identify_conexidade=True)
 
     def hasCiclo(self):
         """Verifica se um grafo possui algum ciclo.
@@ -349,19 +320,23 @@ class Grafo():
               #conjunto_vertices_utilizados.append(element)
               # conjunto_vertices.remove(element1)
 
-    def buscaProfundidade002(self, identify_cycle=False):
-        """Verifica se um grafo (não-orientado) possui algum ciclo através de 
-        uma busca em profundidade. Por utilizar um conjunto, a ordem dos elementos 
+    def buscaProfundidade002(self, identify_cycle=False, identify_conexidade=False):
+        """Verifica se a ordem de exclusão dos vértices de um grafo (não-orientado),
+        ou verifica se possui algum ciclo ou a conexidade do grafo através de uma
+        busca em profundidade. Por utilizar um conjunto, a ordem dos elementos 
         não é preservada, o que faz com que cada execução do código possa retornar 
         uma ordem diferente de outra execução, apesar que correta.
             
         Args:
           identify_cycle (bool): caso Verdadeiro, o algoritmo visa identificar a 
-          existência de ciclo; caso Falso, o algoritmo visa encontrar a ordem de 
-          saturação dos vértices.
+          existência de ciclo;
+          identify_conexidade (bool): caso Verdadeiro, o algoritmo visa identificar a 
+          existência de conexidade;
         Returns:
-          Ordem crescente em que os vértices são saturados, caso identify_cycle=False;
+          Ordem crescente em que os vértices são saturados, caso identify_cycle=False 
+          e identify_conexidade=False;
           Existência de ciclo, caso identify_cycle=True.
+          Conexidade, caso identify_cycle=False e identify_conexidade=True.
         """
         # conjunto_vertices = self.getVertices() - used
         #print(conjunto_vertices)
@@ -373,7 +348,8 @@ class Grafo():
         adjacencia = []
         order = []
         done = []
-        element1 = 0
+        if identify_conexidade:
+          conexo = 0
         #element1 = conjunto_vertices.pop()
         #print("starts at", element1)
         #adjacencia2 = self.__calcVizinhoSucessor(element1) - set(element1)
@@ -390,6 +366,8 @@ class Grafo():
                   return True
             if (len(order) == 0):
               element1 = conjunto_vertices.pop()
+              if identify_conexidade:
+                conexo += 1
               print('new_choice: ', element1)
               if element1 not in used:
                 used.append(element1)
@@ -445,6 +423,9 @@ class Grafo():
 
           if identify_cycle:
             return False
+          if identify_conexidade:
+            print(conexo)
+            return True if conexo == 1 else False
           print('used: ', used)
           print('done: ', done)
 
