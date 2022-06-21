@@ -72,7 +72,7 @@ class Grafo():
         for _, row in self.dataframe.iterrows():
           if (((row["origem"] == inp1) and (row["destino"] == inp2)) or ((row["origem"] == inp2) and (row["destino"] == inp1))):
             return True
-          return False
+        return False
 
     def __hasAresta4(self, inp1, inp2, multiples=False): 
         #Requisito 1: Verificar a existencia de uma aresta entre dois vertices.
@@ -497,21 +497,10 @@ class Grafo():
               pd.DataFrame([row], columns=["origem", "destino", "label"])], 
               ignore_index=False
             ) 
-            #print(second_dataframe.dataframe)   
             if second_dataframe.hasCiclo():
-              #sleep(10)
               second_dataframe.dataframe.drop(index, axis=0, inplace=True)
-          #print(second_dataframe.dataframe)
-          #text = second_dataframe.dataframe[:].to_string(header=False, index=False).replace('NaN', '')
-          #print(text)
-          #second_dataframe.createDataFrame(text)
-          print(len(self.imagem_bin))
           self.imagem_bin['agm'] = second_dataframe.createImg()
-          print(len(self.imagem_bin))
-          print(self.imagem_bin['agm'] == self.imagem_bin['grafo'])
-          #self.imagem_bin["agm"] = second_dataframe.imagem_bin['grafo']
           
-
 
     def __createAresta(self, origem, destino=np.nan, label=np.nan, cluster=np.nan):
         """Cria as linhas do DataFrame.        
