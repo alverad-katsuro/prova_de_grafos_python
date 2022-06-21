@@ -5,3 +5,5 @@ grafo/static/images/grafo
 *.cpython-*.pyc
 */__pychache__/*
 static/CACHE
+./node_modules/*
+node_modules/*
