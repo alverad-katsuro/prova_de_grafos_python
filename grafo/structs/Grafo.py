@@ -1,8 +1,9 @@
 import numpy as np
 import pandas as pd
 from base64 import b64encode
-
 from graphviz import Digraph, Graph
+import sys
+import copy
 
 class Grafo():
     def __init__(self, digrafo = False):
@@ -476,7 +477,100 @@ class Grafo():
           print(list_order)      
           self.imagem_bin["topologica"] = self.createImg(ordering=list_order)
 
+    def ordTopologica(self):
+        list_order = []
+        if self.digrafo and not self.buscaProfundidade001(identify_cycle=True): #not verifying conexidade
+          list_order = self.buscaProfundidade001()
 
+        return list_order
+
+    def getWeightNNodeFromNode(self, i):
+      """ Returns:
+            Uma lista com os vertices vizinhos e os pesos de suas arestas (vizinho, peso) a partir da origem i
+      """
+      dest_node = ''
+      weight_dest = 0
+      nodeNodeNWeight = ('', 0)
+      list_nodeNodeNWeight = []
+      for _, row in self.dataframe.iterrows():
+        #dest_node = row["destino"]
+        #weight_dest = row["label"]
+        if ((row["origem"] == i)):
+          curr_node = row["origem"]
+          dest_node = row["destino"]
+          #print("dn",dest_node)
+          
+          weight_dest = row["label"]
+          nodeNodeNWeight = (dest_node, int(weight_dest))
+          list_nodeNodeNWeight.append(nodeNodeNWeight)
+          
+          #print(weight_dest)
+                  
+      print("dn",dest_node)
+      print(weight_dest)
+      #nodeWeight = dest_node, weight_dest
+      return list_nodeNodeNWeight
+    
+    def dijkstra(self, src):
+      #incompleto
+      """ Executa o algoritmo de dijkstra a partir de uma origem
+          Requisito 11
+
+          Returns:
+            Uma lista com as menores distancias da origem para todos dos vertices
+
+      """ 
+      list_dists = []
+      V = len(self.getVertices())
+
+      #print("nodes:", vertices)
+      vertices = []
+      MAX_SIZE = sys.maxsize
+      dist = [MAX_SIZE] * V
+      
+     
+      #sptSet = [False] * V
+      stack = self.ordTopologica()
+      
+      vertices = copy.deepcopy(stack)
+      print('stack', stack)
+      print('Vertices', vertices)
+      stack.reverse()
+      #vertices.reverse()
+      dist[vertices.index(src)] = 0
+      
+      print('stack', stack)
+      print('Vertices', vertices)
+      print("d", len(stack))
+      while stack:
+        i = stack.pop()
+        
+        
+        for node, weight in self.getWeightNNodeFromNode(i):
+
+        
+          print("i", i)
+          print("node", node)
+          print("weight", weight)
+          
+       
+
+          if dist[vertices.index(node)] > dist[vertices.index(i)] + weight:
+                print("ce")
+                dist[vertices.index(node)] = dist[vertices.index(i)] + weight
+
+      
+      for i in range(V):
+            print("Dijkstra:")
+            
+
+            print (("%d" %dist[i]) if dist[i] != MAX_SIZE else  "Inf" ,end=" ")
+            if dist[i] != MAX_SIZE:
+              list_dists.append(dist[i])
+            else:
+              list_dists.append("Inf")
+            
+      return list_dists
 
     def AGM(self): 
         """Calcula a Árvore Geradora Mínima de um Grafo não-orientado e conexo, utilizando do
