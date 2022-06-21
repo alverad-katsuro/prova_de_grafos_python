@@ -50,7 +50,7 @@ def index(request):
     if "botao_veri_planar_2-con_eule" in request.POST:
       pass
     if "botao_caminho_curto_custo" in request.POST:
-      pass
+      request.POST.get("short_path").split() ## aqui kallil
     if "botao_arv_min" in request.POST:
       grafo.log.append(f"Calculando arvore geradora minima")
       grafo.AGM()

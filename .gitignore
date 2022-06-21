@@ -6,4 +6,4 @@ grafo/static/images/grafo
 */__pychache__/*
 static/CACHE
 ./node_modules/*
-node_modules/*
+node_modules/
