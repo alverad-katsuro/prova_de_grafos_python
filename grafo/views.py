@@ -21,7 +21,7 @@ def index(request):
       if request.POST.get('digrafo') == "False":
         grafo.digrafo = False
       grafo.createDataFrame(request.POST.get("grafo_text"))
-      grafo.createImg()
+      grafo.imagem_bin["grafo"] = grafo.createImg()
     if "botao_verifica_aresta" in request.POST:
       entrada = request.POST.get('vertice_aresta').split()
       if (request.POST.get('vertice_aresta') == ""):
