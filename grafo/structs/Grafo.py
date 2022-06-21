@@ -473,11 +473,8 @@ class Grafo():
         """        
         if self.digrafo and not self.buscaProfundidade001(identify_cycle=True): #not verifying conexidade
           list_order = self.buscaProfundidade001()
-          print(list_order)
-          novo_grafo = Grafo()
-          novo_grafo.dataframe = self.dataframe
-          novo_grafo.createImg(ordering=list_order)
-          self.imagem_bin["topologica"] = novo_grafo.imagem_bin['grafo']
+          print(list_order)      
+          self.imagem_bin["topologica"] = self.createImg(ordering=list_order)
 
 
 
@@ -590,8 +587,7 @@ class Grafo():
               for _, row in df.iterrows():
                 c.edge(row.origem, row.destino, label=str(row.label))
           grafo.render("grafo/static/images/grafo_com_sub_grafos")
-          self.imagem_bin["grafo"] = b64encode(grafo._repr_image_png()).decode()
-          return self.imagem_bin["grafo"]
+          return b64encode(grafo._repr_image_png()).decode()
         else:
           for _, row in self.dataframe.iterrows():
             verdade = row.isnull()
@@ -603,8 +599,7 @@ class Grafo():
             else:
               grafo.node(row.origem)
           grafo.render("grafo/static/images/grafo", overwrite_source=True)
-          self.imagem_bin["grafo"] = b64encode(grafo._repr_image_png()).decode()
-          return self.imagem_bin["grafo"]
+          return b64encode(grafo._repr_image_png()).decode()
           
 
 
