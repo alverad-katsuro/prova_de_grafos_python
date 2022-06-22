@@ -511,7 +511,7 @@ class Grafo():
       #nodeWeight = dest_node, weight_dest
       return list_nodeNodeNWeight
     
-    def dijkstra(self, src):
+    def dijkstra(self, src, goal):
       #incompleto
       """ Executa o algoritmo de dijkstra a partir de uma origem
           Requisito 11
@@ -520,16 +520,18 @@ class Grafo():
             Uma lista com as menores distancias da origem para todos dos vertices
 
       """ 
+      previousNode = []
       list_dists = []
+      path = []
       V = len(self.getVertices())
 
-      #print("nodes:", vertices)
+     
       vertices = []
       MAX_SIZE = sys.maxsize
       dist = [MAX_SIZE] * V
-      
+      previousNode = [0] * V
      
-      #sptSet = [False] * V
+      
       stack = self.ordTopologica()
       
       vertices = copy.deepcopy(stack)
@@ -537,11 +539,16 @@ class Grafo():
       print('Vertices', vertices)
       stack.reverse()
       #vertices.reverse()
+      
       dist[vertices.index(src)] = 0
       
       print('stack', stack)
       print('Vertices', vertices)
       print("d", len(stack))
+
+      #previousNode.append((src, 0))
+      #previousNode[vertices.index(src)] = (src, 0)
+
       while stack:
         i = stack.pop()
         
@@ -557,9 +564,10 @@ class Grafo():
 
           if dist[vertices.index(node)] > dist[vertices.index(i)] + weight:
                 print("ce")
+               
                 dist[vertices.index(node)] = dist[vertices.index(i)] + weight
-
-      
+                #previousNode[vertices.index(node)] = (i, dist[vertices.index(i)] + weight)
+                previousNode[vertices.index(node)] = (i)
       for i in range(V):
             print("Dijkstra:")
             
@@ -567,10 +575,30 @@ class Grafo():
             print (("%d" %dist[i]) if dist[i] != MAX_SIZE else  "Inf" ,end=" ")
             if dist[i] != MAX_SIZE:
               list_dists.append(dist[i])
+
             else:
               list_dists.append("Inf")
+      print("Nodes", vertices)
+      print("pn", previousNode)
+      
+      for i in range(V):
+        if vertices[i] == goal:
+         
+          parentNode = vertices[i]
+          for j in range(V):
+            parent = parentNode
+            path.append(parentNode)
+            parentNode = previousNode[vertices.index(parent)]
+            print("parentNode", parentNode)
+      
             
-      return list_dists
+            if parentNode == src:
+              path.append(parentNode)
+              break
+            
+      path.reverse()
+      print("p", path)
+      return list_dists, path
 
     def AGM(self): 
         """Calcula a Árvore Geradora Mínima de um Grafo não-orientado e conexo, utilizando do
