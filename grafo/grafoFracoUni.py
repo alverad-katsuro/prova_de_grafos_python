@@ -1,4 +1,3 @@
-from asyncio.windows_events import NULL
 from prova_de_grafos_python.grafo.strucs.Grafo import Grafo as Grafo
 import numpy as np
 import pandas as pd
@@ -100,11 +99,11 @@ def checarConexidade(graph, n):
     else:
         return "Fracamente Conexo"
 
-if __name__ == "__main__":
-    grafo = Grafo()
-    grafo.createDataFrame("R0 R1 155 0\nR1 R2 155 1\nR2 R3 155 1 \nR3 R1 155 1")
+#if __name__ == "__main__":
+#    grafo = Grafo()
+#    grafo.createDataFrame("R0 R1 155 0\nR1 R2 155 1\nR2 R3 155 1 \nR3 R1 155 1")
     
-    graph, n = conversaoDataMatriz(grafo)
+#    graph, n = conversaoDataMatriz(grafo)
 
-    resultado = checarConexidade(graph, n)
-    print(resultado)
+#    resultado = checarConexidade(graph, n)
+#    print(resultado)
