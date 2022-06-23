@@ -1,7 +1,10 @@
 import numpy as np
 import pandas as pd
+
 from base64 import b64encode
 from graphviz import Digraph, Graph
+
+from . import grafoFracoUni
 import sys
 import copy
 
@@ -35,6 +38,8 @@ class Grafo():
           if (not pd.isnull(row["destino"])):
             vertices.add(row["origem"]) 
             vertices.add(row["destino"]) 
+          else:
+            vertices.add(row["origem"]) 
         return vertices
 
     def containsAresta(self, *args):
@@ -75,14 +80,20 @@ class Grafo():
             return True
         return False
 
-    def __hasAresta4(self, inp1, inp2, multiples=False): 
-        #Requisito 1: Verificar a existencia de uma aresta entre dois vertices.
-        if multiples:
-          counter = 0
-          for _, row in self.dataframe.iterrows():
-            if (((row["origem"] == inp1) and (row["destino"] == inp2)) or ((row["origem"] == inp2) and (row["destino"] == inp1))):
-              counter +=1
-          return counter
+    def __countAresta3(self, inp1, inp2): 
+        """Conta o número de arestas contidas entre dois vértices
+                  
+        Args:
+          inp1, inp2: nome dos vértices que se deseja contar o número de arestas entre
+            
+        Returns:
+          O número de arestas entre os vértices em questão.
+        """
+        n_arestas = 0
+        for _, row in self.dataframe.iterrows():
+          if (((row["origem"] == inp1) and (row["destino"] == inp2)) or ((row["origem"] == inp2) and (row["destino"] == inp1))):
+            n_arestas +=1
+        return n_arestas
 
     def calcGrau(self, input_name): 
         """Calcula o grau de um vértice de um grafo orientado ou não-orientado.
@@ -197,7 +208,6 @@ class Grafo():
           else:
             if (row["origem"] == input_name):
               viz.add(row["origem"])
-              continue
         return viz
 
     def conexidadeGrafo(self, force=False): 
@@ -219,9 +229,14 @@ class Grafo():
           caso não-orientado, retorna se o grafo é conexo ou desconexo.
         """
         if self.digrafo:
-          if force:
-            pass
-          pass
+          self.digrafo = False
+          conexidade = self.buscaProfundidade002(identify_conexidade=True)
+          self.digrafo = True
+                      
+          if conexidade and force:
+            g, c = grafoFracoUni.conversaoDataMatriz(self)
+            return grafoFracoUni.checarConexidade(g, c)
+          return conexidade 
         else:
           return self.buscaProfundidade002(identify_conexidade=True)
 
@@ -250,15 +265,9 @@ class Grafo():
         if not self.digrafo:
           vertices = list(self.getVertices())
           for i in range(0, len(vertices)):
-            for j in range(1, len(vertices)):
-              if self.__hasAresta4(vertices[i], vertices[j], multiples=True) > 1:
+            for j in range(0, len(vertices)):
+              if self.__countAresta3(vertices[i], vertices[j]) > 1:
                 return True
-          for _, row in self.dataframe.iterrows():
-            x1 = row["origem"]
-            x2 = row["destino"]
-            if x1 == x2: #self-loop
-              return True
- 
           return False
     
     def buscaProfundidade001(self, identify_cycle=False):
@@ -275,35 +284,25 @@ class Grafo():
           Ordem crescente em que os vértices são saturados, caso identify_cycle=False;
           Existência de ciclo, caso identify_cycle=True.
         """
-      # conjunto_vertices = self.getVertices() - used
-        #print(conjunto_vertices)
-        #print(used,'\n')
-        #conjunto_vertices_utilizados = []
         conjunto_vertices = self.getVertices()
         used = []
         adjacencia = set()
         order = []
         done = []
         element1 = 0
-        #element1 = conjunto_vertices.pop()
-        #print("starts at", element1)
-        #adjacencia2 = self.__calcVizinhoSucessor(element1) - set(element1)
         if (self.digrafo):
           count = len(conjunto_vertices)
           while (count != len(done)):
-            """if identify_cycle:
-              for _, row in self.dataframe.iterrows():
-                if ((row["origem"] == element) and (row["destino"] in conjunto2)):
-                  return True
-              return False"""
             print('original', conjunto_vertices)
             print('queue', order)
             print('cortados/preto', done)
+
             if (len(order) == 0):
               element1 = conjunto_vertices.pop()
               print('new_choice: ', element1)
               if element1 not in used:
                 used.append(element1)
+              adjacencia = self.__calcVizinhoSucessor(element1) - set([element1])
             else: 
               element1 = order.pop()
               print('new_choice: ', element1)
@@ -311,12 +310,14 @@ class Grafo():
                 used.insert(len(used), element1)
               if element1 in conjunto_vertices:
                 conjunto_vertices.remove(element1)
+              adjacencia = self.__calcVizinhoSucessor(element1) - set([element1])
+ 
             print(element1)
-            adjacencia = self.__calcVizinhoSucessor(element1) - set([element1])
             if identify_cycle:
               for element in adjacencia:
                 if (element not in conjunto_vertices) and (element in order):
                   return True
+
             if (len(adjacencia) == 0):
               if element1 not in done:
                 done.append(element1)
@@ -338,8 +339,6 @@ class Grafo():
                 order.append(element)
               else:
                 print(f'element {element} was already visited!')
-          #  order.reverse()
-          # conjunto_vertices.insert(0, element1)
             adjacencia = set()
 
           if (identify_cycle):
@@ -350,8 +349,6 @@ class Grafo():
           done.reverse()
 
           return done
-              #conjunto_vertices_utilizados.append(element)
-              # conjunto_vertices.remove(element1)
 
     def buscaProfundidade002(self, identify_cycle=False, identify_conexidade=False):
         """Verifica se a ordem de exclusão dos vértices de um grafo (não-orientado),
@@ -371,10 +368,6 @@ class Grafo():
           Existência de ciclo, caso identify_cycle=True.
           Conexidade, caso identify_cycle=False e identify_conexidade=True.
         """
-        # conjunto_vertices = self.getVertices() - used
-        #print(conjunto_vertices)
-        #print(used,'\n')
-        #conjunto_vertices_utilizados = []
         conjunto_vertices = self.getVertices()
         used = []
         adj = []
@@ -383,10 +376,7 @@ class Grafo():
         done = []
         if identify_conexidade:
           conexo = 0
-        #element1 = conjunto_vertices.pop()
-        #print("starts at", element1)
-        #adjacencia2 = self.__calcVizinhoSucessor(element1) - set(element1)
-        if (self.digrafo == False):
+        if not self.digrafo:
           count = len(conjunto_vertices)
           while (count != len(done)):
             print('original', conjunto_vertices)
@@ -399,12 +389,12 @@ class Grafo():
                   return True
             if (len(order) == 0):
               element1 = conjunto_vertices.pop()
-              if identify_conexidade:
-                conexo += 1
               print('new_choice: ', element1)
               if element1 not in used:
                 used.append(element1)
                 adj = self.__calcVizinhoGeneric(element1) 
+              if identify_conexidade:
+                conexo += 1
             else: 
               element1 = order.pop()
               print('new_choice: ', element1)
@@ -422,14 +412,13 @@ class Grafo():
                 if elementx in adjacencia:
                   adjacencia.remove(elementx)
 
-
-
             print('adj', adjacencia)
       
             if ((len(adjacencia) == 0) or (all(item in used for item in adjacencia))):
               if element1 not in done:
                 done.append(element1)
               print('corta folha', element1)
+   
               adjacencia = []
               continue
             else:
@@ -445,25 +434,21 @@ class Grafo():
             print(f"{element1} -> {adjacencia}")
 
             for element in adjacencia:
-            #  print("i am at", element)
               if ((element in conjunto_vertices) or (element not in order)):
                 order.append(element)
               else:
                 print(f'element {element} was already visited!')
-          #  order.reverse()
-          # conjunto_vertices.insert(0, element1)
+ 
             adjacencia = []
 
           if identify_cycle:
             return False
           if identify_conexidade:
-            print(conexo)
+            print("conexo", conexo)
             return True if conexo == 1 else False
           print('used: ', used)
           print('done: ', done)
-
           done.reverse()
-
           return done
 
     def ordenacaoTopologica(self): 
@@ -472,9 +457,8 @@ class Grafo():
 
         Correspondente ao requisito 9.
         """        
-        if self.digrafo and not self.buscaProfundidade001(identify_cycle=True): #not verifying conexidade
+        if self.digrafo and not self.buscaProfundidade001(identify_cycle=True) and self.conexidadeGrafo():
           list_order = self.buscaProfundidade001()
-          print(list_order)      
           self.imagem_bin["topologica"] = self.createImg(ordering=list_order)
 
     def ordTopologica(self):
@@ -486,7 +470,8 @@ class Grafo():
 
     def getWeightNNodeFromNode(self, i):
       """ Returns:
-            Uma lista com os vertices vizinhos e os pesos de suas arestas (vizinho, peso) a partir da origem i
+            Uma lista com os vertices vizinhos e os pesos de suas arestas (vizinho, peso)
+            a partir da origem i
       """
       dest_node = ''
       weight_dest = 0
@@ -608,8 +593,8 @@ class Grafo():
 
         Correspondente ao requisito 12.
         """
-        if (self.digrafo == False): #!Incompleto. Não confere a conexidade
-          self.dataframe['label'] = pd.to_numeric(self.dataframe['label'], errors='coerce')#.values.all()
+        if self.conexidadeGrafo and not self.digrafo:
+          self.dataframe['label'] = pd.to_numeric(self.dataframe['label'], errors='coerce')
           self.dataframe = self.dataframe.sort_values(by=['label'])
           self.dataframe = self.dataframe.drop_duplicates()
           second_dataframe = Grafo()

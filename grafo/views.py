@@ -37,11 +37,11 @@ def index(request):
     if "botao_grafo_nori_conexo" in request.POST:
       grafo.log.append(f"O grafo não orientado é conexo?: {grafo.conexidadeGrafo()}")
     if "botao_veri_digra_frac_conexo" in request.POST:
-      pass
+      grafo.log.append(f"O grafo orientado é fracamente conexo?: {grafo.conexidadeGrafo(force=True)}")
     if "botao_veri_digra_uni_conexo" in request.POST:
-      pass
+      grafo.log.append(f"O grafo orientado é unilateralmente conexo?: {grafo.conexidadeGrafo(force=True)}")
     if "botao_di_fort_conex" in request.POST:
-      pass
+      grafo.log.append(f"O grafo não orientado é fortemente conexo?: {grafo.conexidadeGrafo(force=True)}")
     if "botao_graf_ciclo?" in request.POST:
       grafo.log.append(f"O grafo possui ciclo?: {grafo.hasCiclo()}")
     if "botao_dig_aci_cone_ord_top" in request.POST:

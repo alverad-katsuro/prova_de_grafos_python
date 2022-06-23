@@ -1,6 +1,7 @@
-from prova_de_grafos_python.grafo.strucs.Grafo import Grafo as Grafo
 import numpy as np
 import pandas as pd
+
+from . import Grafo as Grafo
 
 def conversaoDataMatriz(grafoOriginal):
     grafoData =  grafoOriginal.dataframe.iloc[:,:2].values.tolist()
