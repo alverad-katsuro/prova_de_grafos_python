@@ -495,7 +495,81 @@ class Grafo():
       print(weight_dest)
       #nodeWeight = dest_node, weight_dest
       return list_nodeNodeNWeight
-    
+    def getCurrNParentNWeight(self):
+      dest_node = ''
+      weight_dest = 0
+      currNParentNWeight = ('','', 0)
+      
+      list_nodeNodeNWeight = []
+      for _, row in self.dataframe.iterrows():
+             
+        curr_node = row["origem"]
+        dest_node = row["destino"]      
+        weight_dest = row["label"]
+
+        nodeNodeNWeight = (curr_node, dest_node, int(weight_dest))
+        list_nodeNodeNWeight.append(nodeNodeNWeight)
+          
+      return list_nodeNodeNWeight
+
+
+    def bellmanFord(self, src, goal):
+      vertices = self.getVertices()
+      V = len(self.getVertices())
+      vertices = list(vertices)
+      path = []
+
+      previousNode = [0] * V
+      list_dists = []
+      dist = [float("Inf")] * V
+      dist[vertices.index(src)] = 0
+      
+
+      for _ in range(V -1):
+        for u, v, w in self.getCurrNParentNWeight():
+          if dist[vertices.index(u)] != float("Inf") and dist[vertices.index(u)] + w < dist[vertices.index(v)]:
+
+            dist[vertices.index(v)] = dist[vertices.index(u)] + w
+            previousNode[vertices.index(v)] = (u)
+
+      for u, v, w in self.getCurrNParentNWeight():
+        if dist[vertices.index(u)] != float("Inf") and dist[vertices.index(u)] + w < dist[vertices.index(v)]:
+          print("O grafo possui um ciclo negativo")
+          return 0 # break ?
+
+      for i in range(V):
+            print("BellmanFord:")
+            
+
+            print (("%d" %dist[i]) if dist[i] != "Inf" else  "Inf" ,end=" ")
+            if dist[i] != "Inf":
+              list_dists.append(dist[i])
+
+            else:
+              list_dists.append("Inf")
+      print("Nodes", vertices)
+      print("pn", previousNode)
+      
+      for i in range(V):
+        if vertices[i] == goal:
+         
+          parentNode = vertices[i]
+          for j in range(V):
+            parent = parentNode
+            path.append(parentNode)
+            parentNode = previousNode[vertices.index(parent)]
+            print("parentNode", parentNode)
+      
+            
+            if parentNode == src:
+              path.append(parentNode)
+              break
+            
+      path.reverse()
+      print("p", path)
+      return list_dists, path
+
+
     def dijkstra(self, src, goal):
       #incompleto
       """ Executa o algoritmo de dijkstra a partir de uma origem
