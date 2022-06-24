@@ -1,7 +1,18 @@
+<<<<<<< HEAD
 graph G {
 	rankdir=LR shape=circle size="8,5"
 	A -- B
 	A -- D
 	B -- C
 	C -- D
+=======
+digraph G {
+	ordering=in rank=same rankdir=TB shape=circle size="8,5"
+	{
+		r0
+		r1
+		r0 -> r1 [style=invis]
+	}
+	r0 -> r1
+>>>>>>> carousel
 }
