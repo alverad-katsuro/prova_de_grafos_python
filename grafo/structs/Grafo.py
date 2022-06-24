@@ -478,24 +478,27 @@ class Grafo():
       nodeNodeNWeight = ('', 0)
       list_nodeNodeNWeight = []
       for _, row in self.dataframe.iterrows():
-        #dest_node = row["destino"]
-        #weight_dest = row["label"]
+      
         if ((row["origem"] == i)):
-          curr_node = row["origem"]
           dest_node = row["destino"]
-          #print("dn",dest_node)
+          
           
           weight_dest = row["label"]
           nodeNodeNWeight = (dest_node, int(weight_dest))
           list_nodeNodeNWeight.append(nodeNodeNWeight)
           
-          #print(weight_dest)
-                  
       print("dn",dest_node)
       print(weight_dest)
-      #nodeWeight = dest_node, weight_dest
+     
       return list_nodeNodeNWeight
+
     def getCurrNParentNWeight(self):
+      """ Avalia todas as ligacoes(edges) do grafo
+
+          Returns:
+            Uma lista com tuplas contendo
+            (o vertices atual, o vertice parente, o peso da aresta entre os dois)
+      """
       dest_node = ''
       weight_dest = 0
       currNParentNWeight = ('','', 0)
@@ -511,9 +514,46 @@ class Grafo():
         list_nodeNodeNWeight.append(nodeNodeNWeight)
           
       return list_nodeNodeNWeight
+  
+
+    def defaultLabelToOne(self):
+
+      """ Caso o grafo seja nao ponderado, ou seja, os labels são null eles são trocados para o peso padrao 1
+          permitindo o calculo do menor caminho em grafos nao ponderados
+          
+          Returns:
+            Retorna um novo grafo com os labels como 1
+
+          !Requisito 11!
+      """ 
+
+      vertices = set()
+      newGraph = self
+      for _, row in self.dataframe.iterrows():
+        if (not pd.isnull(row["destino"])):
+          #vertices.add(row["origem"]) 
+          #vertices.add(row["destino"])
+          if (pd.isnull(row["label"])):
+            row["label"] = 1
+            newGraph = row["label"]
+        
+      return newGraph
+
 
 
     def bellmanFord(self, src, goal):
+      """ Executa o algoritmo de bellmanFord a partir de uma origem(src) até um alvo(goal)
+          
+
+          Returns:
+            Uma lista com as menores distancias da origem para todos dos vertices
+            e uma lista de vertices na ordem do menor caminho da origem até o alvo
+
+          !Requisito 11!
+      """ 
+    
+      print(self.defaultLabelToOne())
+      self = self.defaultLabelToOne()
       vertices = self.getVertices()
       V = len(self.getVertices())
       vertices = list(vertices)
@@ -524,7 +564,6 @@ class Grafo():
       dist = [float("Inf")] * V
       dist[vertices.index(src)] = 0
       
-
       for _ in range(V -1):
         for u, v, w in self.getCurrNParentNWeight():
           if dist[vertices.index(u)] != float("Inf") and dist[vertices.index(u)] + w < dist[vertices.index(v)]:
@@ -540,7 +579,6 @@ class Grafo():
       for i in range(V):
             print("BellmanFord:")
             
-
             print (("%d" %dist[i]) if dist[i] != "Inf" else  "Inf" ,end=" ")
             if dist[i] != "Inf":
               list_dists.append(dist[i])
@@ -571,8 +609,8 @@ class Grafo():
 
 
     def dijkstra(self, src, goal):
-      #incompleto
-      """ Executa o algoritmo de dijkstra a partir de uma origem
+      
+      """ !Obsoleto!Executa o algoritmo de dijkstra a partir de uma origem
           Requisito 11
 
           Returns:
@@ -584,13 +622,11 @@ class Grafo():
       path = []
       V = len(self.getVertices())
 
-     
       vertices = []
       MAX_SIZE = sys.maxsize
       dist = [MAX_SIZE] * V
       previousNode = [0] * V
      
-      
       stack = self.ordTopologica()
       
       vertices = copy.deepcopy(stack)
@@ -605,22 +641,14 @@ class Grafo():
       print('Vertices', vertices)
       print("d", len(stack))
 
-      #previousNode.append((src, 0))
-      #previousNode[vertices.index(src)] = (src, 0)
-
       while stack:
         i = stack.pop()
-        
-        
+      
         for node, weight in self.getWeightNNodeFromNode(i):
 
-        
           print("i", i)
           print("node", node)
           print("weight", weight)
-          
-       
-
           if dist[vertices.index(node)] > dist[vertices.index(i)] + weight:
                 print("ce")
                
