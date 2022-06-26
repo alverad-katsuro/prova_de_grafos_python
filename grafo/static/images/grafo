@@ -1,4 +1,5 @@
-graph G {
+digraph G {
+	graph [label=Vizinhos labelloc=t]
 	rankdir=LR shape=circle size=30.0
-	a -- b [label=1]
+	X
 }
