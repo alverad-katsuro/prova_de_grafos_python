@@ -49,7 +49,7 @@ class Grafo():
             self.inserir_adjcencia(aresta[0], aresta[1])
             self.inserir_adjcencia_transposta(aresta[1], aresta[0])
         resposta = self.__kosaraju()
-        if self.conexidadeGrafo():
+        if ("Fortemente conexo" == self.conexidadeGrafo(force=True)): 
           self.__moduloCompFort(resposta)
         return resposta
         

@@ -1,8 +1,9 @@
-graph G {
+digraph G {
+	graph [label=Grafo labelloc=t]
 	rankdir=LR shape=circle size=30.0
-	a -- b [label=1]
-	b -- c [label=50]
-	a -- d [label=5]
-	e -- d [label=5]
-	e -- c [label=5]
+	a -> b [label=1]
+	b -> c [label=50]
+	a -> d [label=5]
+	e -> d [label=5]
+	e -> c [label=5]
 }

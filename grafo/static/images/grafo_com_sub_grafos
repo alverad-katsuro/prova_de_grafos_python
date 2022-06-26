@@ -1,14 +1,18 @@
 digraph G {
 	graph [label="Componentes Fortes" labelloc=t]
 	rankdir=LR shape=circle size=30.0
-	subgraph "cluster 1" {
-		color=yellow label="Componente 1"
-		A -> B [label=1]
-		B -> C [label=3]
-		C -> A [label=7]
+	subgraph "cluster 4" {
+		color=yellow label="Componente 4"
+		a -> b [label=1]
 	}
-	subgraph "cluster 2" {
-		color=pink label="Componente 2"
-		C -> T [label=9]
+	subgraph "cluster 5" {
+		color=pink label="Componente 5"
+		b -> c [label=50]
+		e -> c [label=5]
+	}
+	subgraph "cluster 3" {
+		color=red label="Componente 3"
+		a -> d [label=5]
+		e -> d [label=5]
 	}
 }
