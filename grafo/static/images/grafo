@@ -1,5 +1,16 @@
 digraph G {
-	graph [label=Vizinhos labelloc=t]
-	rankdir=LR shape=circle size=30.0
-	X
+	graph [label="Ordenação Topologica" labelloc=t]
+	ordering=in rank=same rankdir=TB shape=circle size=30.0
+	{
+		A
+		B
+		C
+		T
+		A -> B [style=invis]
+		B -> C [style=invis]
+		C -> T [style=invis]
+	}
+	A -> B [label=1]
+	B -> C [label=3]
+	C -> T [label=9]
 }

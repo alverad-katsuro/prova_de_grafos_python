@@ -48,8 +48,52 @@ class Grafo():
         for aresta in self.dataframe.iloc[:,:2].values.tolist():
             self.inserir_adjcencia(aresta[0], aresta[1])
             self.inserir_adjcencia_transposta(aresta[1], aresta[0])
-        return self.__kosaraju()
+        resposta = self.__kosaraju()
+        if self.conexidadeGrafo():
+          self.__moduloCompFort(resposta)
+        return resposta
         
+
+    def __moduloCompFort(self, resposta):
+      total = []
+      for elementos in resposta:
+        if len(elementos) == 1:
+          for el in list(elementos):
+            if float != type(el):
+              total.append(elementos)
+        else:
+          total.append(elementos)
+      grafo = Grafo()
+      grafo.dataframe = self.dataframe
+      ordem = {}
+      for componentes in total:
+        if len(componentes) in ordem:
+          ordem[len(componentes)].append(list(componentes))
+        else:
+          ordem[len(componentes)] = [list(componentes)]
+      keys_ord = list(ordem.keys())
+      keys_ord.sort()
+      keys_ord.reverse()
+      cluster = 0
+      print("self.dataframe")
+      print(self.dataframe)
+      index_to_remove = []
+      for key in keys_ord:
+        for elementos in ordem[key]:
+          cluster += 1
+          for elemento in elementos:
+            index = grafo.dataframe.query(f"(origem == '{elemento}') | (destino == '{elemento}')").index
+            for i in index:
+              grafo.dataframe.at[i, 'cluster'] = cluster
+      for i in index_to_remove:
+        row = grafo.dataframe.iloc[i]
+        grafo.dataframe = grafo.dataframe.drop(i)
+        cluster+=1
+        grafo.__createAresta(row.origem, cluster=cluster)
+        grafo.__createAresta(row.destino, cluster=cluster)
+              
+      print(grafo.dataframe)
+      self.imagem_bin['componente_forte'] = self.createImg_from_data(grafo.dataframe, nome="Componentes Fortes")
 
 
     
@@ -810,12 +854,20 @@ class Grafo():
             for edge_inv in range(0, len(ordering)-1):
               level.edge(ordering[edge_inv], ordering[edge_inv+1], style='invis')
         if (clusters > 1):
-          for cluster in dataframe.cluster.unique():
+          for cluster in self.dataframe.cluster.unique():
             df = dataframe.query("cluster == @cluster")
             with grafo.subgraph(name=f"cluster {cluster}") as c:
               c.attr(color=cores.pop(), label=f"Componente {cluster}")
               for _, row in df.iterrows():
-                c.edge(row.origem, row.destino, label=str(row.label))
+                verdade = row.isnull()
+                print(verdade[2])
+                if not verdade[1]:
+                  if not verdade[2]:
+                    c.edge(row.origem, row.destino, str(row.label))
+                  else:
+                    c.edge(row.origem, row.destino)
+                else:
+                  c.node(row.origem)
           grafo.render("grafo/static/images/grafo_com_sub_grafos")
           return b64encode(grafo._repr_image_png()).decode()
         else:
