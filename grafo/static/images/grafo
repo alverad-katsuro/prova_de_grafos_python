@@ -1,5 +1,4 @@
 graph G {
 	rankdir=LR shape=circle size=30.0
-	b -- a [label=1]
-	a -- a [label=3]
+	a -- b [label=1]
 }
