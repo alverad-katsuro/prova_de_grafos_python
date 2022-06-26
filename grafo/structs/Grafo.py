@@ -819,7 +819,7 @@ class Grafo():
       for u, v, w in self.getCurrNParentNWeight():
         if dist[vertices.index(u)] != float("Inf") and dist[vertices.index(u)] + w < dist[vertices.index(v)]:
           print("O grafo possui um ciclo negativo")
-          return 0 # break ?
+          return "O grafo possui um ciclo negativo" # break ?
 
       for i in range(V):
             print("BellmanFord:")
@@ -849,7 +849,7 @@ class Grafo():
             
       path.reverse()
       print("p", path)
-      return list_dists, path
+      return path
 
 
     def dijkstra(self, src, goal):

@@ -85,8 +85,10 @@ def index(request):
     #R11
     if "botao_caminho_curto_custo" in request.POST:
       entrada = request.POST.get("short_path").split()
-       
-      grafo.log.append(f"Calculando o caminho mais curto: {grafo.bellmanFord(entrada[0], entrada[1])[1]}")
+      print("entrada0", entrada[0])
+      print("entrada1", entrada[1])
+
+      grafo.log.append(f"Calculando o caminho mais curto: {grafo.bellmanFord(entrada[0], entrada[1])}")
     #R12
     if "botao_arv_min" in request.POST:
       if not grafo.digrafo:
