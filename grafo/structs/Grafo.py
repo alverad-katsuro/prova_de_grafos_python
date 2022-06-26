@@ -42,51 +42,59 @@ class Grafo():
             print(f"{i}: {', '.join(str(x) for x in self.lista_adjacente[i])}")
 
 
-    def __startAdj(self):
-        for i in self.dataframe.iloc[:,:2].values.tolist():
-            if i[0] not in self.lista_adjacente.keys():
-                self.lista_adjacente[i[0]] = []
-
-            if i[1] not in self.lista_adjacente.keys():
-                self.lista_adjacente[i[1]] = []
-
-    def __startAdjTrans(self):
-        for i in self.dataframe.iloc[:,:2].values.tolist():
-            if i[0] not in self.lista_adjacente_transposta.keys():
-                self.lista_adjacente_transposta[i[0]] = []
-
-            if i[1] not in self.lista_adjacente_transposta.keys():
-                self.lista_adjacente_transposta[i[1]] = []
-
     def comp_forts(self):
         self.__startAdj()
         self.__startAdjTrans()
         for aresta in self.dataframe.iloc[:,:2].values.tolist():
             self.inserir_adjcencia(aresta[0], aresta[1])
             self.inserir_adjcencia_transposta(aresta[1], aresta[0])
-        return self.__kosaraju()
+        resposta = self.__kosaraju()
+        if self.conexidadeGrafo():
+          self.__moduloCompFort(resposta)
+        return resposta
         
 
-    def __kosaraju(self):
-        """ 
-        Algoritmo de Kosaraju (1978) obtém os componentes fortemente conexos do grafo orientado. 
-        1. Execute DFS(G) para obter f[v] para v ∈ V
-        2. Obter o grafo transposto GT (é passado por parametro)
-        3. Execute DFS(GT) considerando os vértices em ordem decrescente de f[v].
-        4. Devolva os conjuntos de vértices de cada árvore da floresta de busca em profundidade obtida
-        """
+    def __moduloCompFort(self, resposta):
+      total = []
+      for elementos in resposta:
+        if len(elementos) == 1:
+          for el in list(elementos):
+            if float != type(el):
+              total.append(elementos)
+        else:
+          total.append(elementos)
+      grafo = Grafo()
+      grafo.dataframe = self.dataframe
+      ordem = {}
+      for componentes in total:
+        if len(componentes) in ordem:
+          ordem[len(componentes)].append(list(componentes))
+        else:
+          ordem[len(componentes)] = [list(componentes)]
+      keys_ord = list(ordem.keys())
+      keys_ord.sort()
+      keys_ord.reverse()
+      cluster = 0
+      print("self.dataframe")
+      print(self.dataframe)
+      index_to_remove = []
+      for key in keys_ord:
+        for elementos in ordem[key]:
+          cluster += 1
+          for elemento in elementos:
+            index = grafo.dataframe.query(f"(origem == '{elemento}') | (destino == '{elemento}')").index
+            for i in index:
+              grafo.dataframe.at[i, 'cluster'] = cluster
+      for i in index_to_remove:
+        row = grafo.dataframe.iloc[i]
+        grafo.dataframe = grafo.dataframe.drop(i)
+        cluster+=1
+        grafo.__createAresta(row.origem, cluster=cluster)
+        grafo.__createAresta(row.destino, cluster=cluster)
+              
+      print(grafo.dataframe)
+      self.imagem_bin['componente_forte'] = self.createImg_from_data(grafo.dataframe, nome="Componentes Fortes")
 
-        visitados = {}
-        for i in self.lista_adjacente.keys():
-            visitados[i] = False
-        
-        ordem = []  # Vetor dos tempos de finalização de cada vértice
-
-        for vertice in self.lista_adjacente.keys():
-            if not visitados[vertice]:
-                self.DFS(vertice, ordem, visitados)
-
-        return self.DFS_transposto(ordem)
 
     
     def DFS(self, u, ordem, visitados):
@@ -169,124 +177,6 @@ class Grafo():
           return self.__hasAresta2(args[0])
         elif len(args) == 2 and isinstance(args[0], str) and isinstance(args[1], str):
           return self.__hasAresta3(args[0], args[1])
-
-    def __hasAresta1(self): 
-        #Requisito 1: Verificar a existencia de uma aresta.
-        return False if (self.dataframe["destino"].isnull().values.all()) else True
-
-    def __hasAresta2(self, inp1): 
-        #Requisito 1: Verificar a existencia de uma aresta em determinado vertice.
-        return True if (self.calcGrau(inp1) > 0) else False
-
-    def __hasAresta3(self, inp1, inp2): 
-        #Requisito 1: Verificar a existencia de uma aresta entre dois vertices.
-        for _, row in self.dataframe.iterrows():
-          if (((row["origem"] == inp1) and (row["destino"] == inp2)) or ((row["origem"] == inp2) and (row["destino"] == inp1))):
-            return True
-        return False
-
-    def __createAresta(self, origem, destino=np.nan, label=np.nan, cluster=np.nan):
-        """Cria as linhas do DataFrame.        
-        Args:
-            origem: vértice inicial, requisito mínimo para geração de um grafo; 
-            destino: vértice final, criando uma aresta da origem até o destino caso
-            passada como argumento;
-            label: label da aresta, podendo conter o peso e o custo formatados;
-            cluster: subgrafo organizado em grupo.
-        """      
-        if len(self.dataframe.query("(origem == @origem) & (destino == @destino) & (label == @label) & (cluster == @cluster)")) == 0:
-            self.dataframe = pd.concat(
-            [self.dataframe, 
-            pd.DataFrame([[origem, destino, label, cluster]], 
-            columns=["origem", "destino", "label", "cluster"])
-            ], 
-            ignore_index=True
-            )
-
-    def __countAresta3(self, inp1, inp2): 
-        """Conta o número de arestas contidas entre dois vértices
-                  
-        Args:
-          inp1, inp2: nome dos vértices que se deseja contar o número de arestas entre
-            
-        Returns:
-          O número de arestas entre os vértices em questão.
-        """
-        n_arestas = 0
-        for _, row in self.dataframe.iterrows():
-          if (((row["origem"] == inp1) and (row["destino"] == inp2)) or ((row["origem"] == inp2) and (row["destino"] == inp1))):
-            n_arestas +=1
-        return n_arestas
-
-
-    def __calcVizinhoGeneric(self, input_name): 
-        """Calcula a adjacência de um vértice de um grafo não-orientado.
-        
-        Correspondente ao requisito 3.
-          
-        Args:
-          input_name (String): nome do vértice que se deseja calcular a adjacência.
-            
-        Returns:
-          A adjacência do vértice, que inclui a superior e a inferior.
-        """
-        viz = set()
-        for _, row in self.dataframe.iterrows():
-          if ((row["origem"] == input_name) and (not pd.isnull(row["destino"]))):
-            viz.add(row["origem"])
-            viz.add(row["destino"])
-          elif ((row["origem"] == input_name) and (pd.isnull(row["destino"]))):
-            viz.add(row["origem"])
-          elif (row["destino"] == input_name):
-            viz.add(row["origem"])
-            viz.add(row["destino"])
-          else:
-            continue
-        return viz
-
-    def __calcVizinhoSucessor(self, input_name): 
-        """Calcula a adjacência superior de um vértice de um grafo orientado.
-        
-        Correspondente ao requisito 3.
-          
-        Args:
-          input_name (String): nome do vértice que se deseja calcular a adjacência.
-            
-        Returns:
-          A adjacência superior do vértice;
-        """
-        viz = set()
-        for _, row in self.dataframe.iterrows():
-          if ((row["origem"] == input_name) and (not pd.isnull(row["destino"]))):
-            viz.add(row["origem"])
-            viz.add(row["destino"])
-          elif ((row["origem"] == input_name) and (pd.isnull(row["destino"]))):
-            viz.add(row["origem"])
-          else:
-            continue
-        return viz
-
-    def __calcVizinhoAntecessor(self, input_name): 
-        """Calcula a adjacência inferior de um vértice de um grafo orientado.
-        
-        Correspondente ao requisito 3.
-          
-        Args:
-          input_name (String): nome do vértice que se deseja calcular a adjacência.
-            
-        Returns:
-          A adjacência inferior do vértice;
-        """
-        viz = set()
-        for _, row in self.dataframe.iterrows():
-          if (row["destino"] == input_name):
-            viz.add(row["destino"])
-            viz.add(row["origem"])
-          else:
-            if (row["origem"] == input_name):
-              viz.add(row["origem"])
-        return viz
-
     def calcGrau(self, input_name): 
         """Calcula o grau de um vértice de um grafo orientado ou não-orientado.
         
@@ -329,10 +219,32 @@ class Grafo():
         """
         if self.digrafo:
           if sucessor:
-            return self.__calcVizinhoSucessor(input_name)
-          return self.__calcVizinhoSucessor(input_name).union(self.__calcVizinhoAntecessor(input_name))
+            retorno = self.__calcVizinhoSucessor(input_name)
+            self.__moduloAdjIMG(input_name, retorno)
+            return retorno
+          retorno = (self.__calcVizinhoAntecessor(input_name).union(self.__calcVizinhoSucessor(input_name)))
+          self.__moduloAdjIMG(input_name, retorno)
+          return retorno
         else:
-          return self.__calcVizinhoGeneric(input_name)
+          retorno = (self.__calcVizinhoGeneric(input_name))
+          self.__moduloAdjIMG(input_name, retorno)
+          return retorno
+
+    def __moduloAdjIMG(self, input_name, retorno):
+      retorno.remove(input_name)
+      retorno = list(retorno)
+      tamanho = len(retorno)
+      string_q = ""
+      for index in range(tamanho):
+        if index + 1 == tamanho:
+          string_q += f"(origem == '{input_name}' & destino == '{retorno[index]}') | (origem == '{retorno[index]}' & destino == '{input_name}')"
+        else:
+          string_q += f"(origem == '{input_name}' & destino == '{retorno[index]}') | (origem == '{retorno[index]}' & destino == '{input_name}') | "
+      try:
+        self.imagem_bin['adjacencia'] = self.createImg_from_data(self.dataframe.query(string_q), nome="Vizinhos")
+      except ValueError:
+        self.imagem_bin['adjacencia'] = self.createImg_from_data(self.dataframe.query(f"origem == '{input_name}'"), nome="Vizinhos")
+
 
     def conexidadeGrafo(self, force=False): 
         """Verifica se um grafo é conexo ou desconexo, e caso seja 
@@ -479,105 +391,6 @@ class Grafo():
 
           return done
 
-    def __conversaoDataMatriz(self):
-        grafoData =  self.dataframe.iloc[:,:2].values.tolist()
-        #print(grafoData)
-
-        #print(grafo.dataframe)
-        #grafo.createImg()
-        vert = set()
-        for i in grafoData:
-            for j in i:
-                if j not in vert:
-                    vert.update({j}) #adiciona o vertices no conjunto pra saber quem e
-
-        l = list(vert) #converte para lista total de vertices
-        l.sort()
-        #print(l)
-        count = len(l)
-
-        #faz matriz de adjacencia
-        graph = [0] * count
-        for i in graph:
-            graph[graph.index(i)] = [0] * count #cria a lista da lista (colunas da matriz)
-
-        #def printg(graph):
-        #    for i in graph:
-        #        print(i)
-
-        for i in l: #linha matriz adj
-            g = l.index(i) #localiza vertice na lista
-            for k in l: #coluna matriz adj
-                if i != k:
-                    for v in grafoData: # loop pra procurar vertice i na matriz original
-                        if v[0] == i:
-                            if k == v[1]: #checar se vertice conectado a vertice i e o vertice k, caso positivo bota 1
-                                graph[g][l.index(k)] = 1
-
-        #printg(graph)
-        # multiplicando matriz adj por ela mesma V vezes pra ter matriz caminho
-        b = np.array(graph)
-        c = np.array(graph)
-        for i in range(count):
-            b = b + np.dot(b,c)
-
-        #print("matriz caminho antes\n", b, "\n")
-        lin = 0
-        for i in b:
-            col = 0
-            for j in i:
-                if j > 1: # substitui numeros maiores que 1 por 1 na matriz caminho
-                    b[lin][col] = 1
-                col +=1
-            lin += 1
-        #print("matriz caminho depois\n", b, "\n")
-        # retorna matriz caminho e contagem de vertices
-        self.matrizCaminho = b
-
-
-    def __checarConexidade(self):
-        n = len(self.matrizCaminho)
-        strongly = True # checa se grafo é fortemente conexo
-        for i in range(n):
-            for j in range(n):
-                # se todos os elementos nao forem iguais entao o grafo nao e fortemente conectado
-                if (self.matrizCaminho[i][j] != self.matrizCaminho[j][i]):
-                    strongly = False
-                    break
-            if not strongly:
-              break
-        if (strongly):
-            return "Fortemente conexo"  
-
-        # checa se grafo e unilateral pela matriz triangular superior
-        uppertri = True
-        for i in range(n):
-            for j in range(n):
-                # Se  algum elemento do triangulo superior for 0, entao falso
-                if (i > j and self.matrizCaminho[i][j] == 0):
-                    uppertri = False
-                    break;            
-            if not uppertri:
-                break;    
-        if uppertri:
-            return "Unilateralmente Conexo"
-
-        # checa se grafo e unilateral pela matriz triangular inferior
-        lowertri = True
-        for i in range(n):
-            for j in range(n):
-                # Se  algum elemento do triangulo inferior for 0, entao falso
-                if (i < j and self.matrizCaminho[i][j] == 0):
-                    lowertri = False
-                    break
-            if not lowertri:
-                break;        
-        if lowertri:
-            return "Unilateralmente Conexo"
-        # Se elementos estao em ordem aleatoria e nao sincronizados entao e fraco
-        else:
-            return "Fracamente Conexo"
-
     def buscaProfundidade002(self, identify_cycle=False, identify_conexidade=False):
         """Verifica se a ordem de exclusão dos vértices de um grafo (não-orientado),
         ou verifica se possui algum ciclo ou a conexidade do grafo através de uma
@@ -687,7 +500,7 @@ class Grafo():
         """        
         if self.digrafo and not self.buscaProfundidade001(identify_cycle=True) and self.conexidadeGrafo():
           list_order = self.buscaProfundidade001()
-          self.imagem_bin["topologica"] = self.createImg(ordering=list_order)
+          self.imagem_bin["topologica"] = self.createImg(ordering=list_order, nome="Ordenação Topologica")
 
     def ordTopologica(self):
         list_order = []
@@ -952,7 +765,7 @@ class Grafo():
             ) 
             if second_dataframe.hasCiclo():
               second_dataframe.dataframe.drop(index, axis=0, inplace=True)
-          self.imagem_bin['agm'] = second_dataframe.createImg()
+          self.imagem_bin['agm'] = second_dataframe.createImg(nome="AGM")
           
 
     def createDataFrame(self, text):
@@ -981,7 +794,7 @@ class Grafo():
         except TypeError:
             print("Algum erro no codigo do pedro")
 
-    def createImg(self, ordering=[]):
+    def createImg(self, ordering=[], nome="Grafo"):
         """Gera a imagem do grafo em questão, mediante escrita do mesmo no arquivo 
         grafo.txt/grafo_com_sub_grafos.txt, e constrói a imagem correspondente no arquivo
         grafo.png/grafo_com_sub_grafos.png
@@ -995,9 +808,9 @@ class Grafo():
         cores = ["blue", "lightgrey", "red", "pink", "yellow"]
         clusters = len(self.dataframe.cluster.unique())
         if (self.digrafo):
-          grafo = Digraph("G", format='png')
+          grafo = Digraph("G", format='png', graph_attr={"label": nome, "labelloc": "t"})
         else:
-          grafo = Graph("G", format='png')
+          grafo = Graph("G", format='png', graph_attr={"label": nome, "labelloc": "t"})
         if (len(ordering) == 0):
           grafo.attr(shape="circle", rankdir="LR", size="30.0")
         elif (len(ordering) > 0):
@@ -1028,6 +841,314 @@ class Grafo():
               grafo.node(row.origem)
           grafo.render("grafo/static/images/grafo", overwrite_source=True)
           return b64encode(grafo._repr_image_png()).decode()
+
+
+    def createImg_from_data(self, dataframe, ordering=[], nome="Grafo"):
+        """Gera a imagem do grafo em questão, mediante escrita do mesmo no arquivo 
+        grafo.txt/grafo_com_sub_grafos.txt, e constrói a imagem correspondente no arquivo
+        grafo.png/grafo_com_sub_grafos.png
+        
+        Args:
+          ordering (list): Lista que define a ordem em que os elementos devem ser criados
+          e dispostos de forma horizontal na imagem. Caso vazia, os elementos são criados
+          na ordem em que foram instanciados para a criação de arestas, e não sao dispostos
+          horizontalmente. Importante para a ordenação topológica.
+        """
+        cores = ["blue", "lightgrey", "red", "pink", "yellow"]
+        clusters = len(dataframe.cluster.unique())
+        if (self.digrafo):
+          grafo = Digraph("G", format='png', graph_attr={"label": nome, "labelloc": "t"})
+        else:
+          grafo = Graph("G", format='png', graph_attr={"label": nome, "labelloc": "t"})
+        if (len(ordering) == 0):
+          grafo.attr(shape="circle", rankdir="LR", size="30.0")
+        elif (len(ordering) > 0):
+          grafo.attr(shape="circle", rankdir="TB", size="30.0", ordering='in', rank='same')
+          with grafo.subgraph() as level:
+            for node_name in range(0, len(ordering)):
+              level.node(ordering[node_name])
+            for edge_inv in range(0, len(ordering)-1):
+              level.edge(ordering[edge_inv], ordering[edge_inv+1], style='invis')
+        if (clusters > 1):
+          for cluster in self.dataframe.cluster.unique():
+            df = dataframe.query("cluster == @cluster")
+            with grafo.subgraph(name=f"cluster {cluster}") as c:
+              c.attr(color=cores.pop(), label=f"Componente {cluster}")
+              for _, row in df.iterrows():
+                verdade = row.isnull()
+                print(verdade[2])
+                if not verdade[1]:
+                  if not verdade[2]:
+                    c.edge(row.origem, row.destino, str(row.label))
+                  else:
+                    c.edge(row.origem, row.destino)
+                else:
+                  c.node(row.origem)
+          grafo.render("grafo/static/images/grafo_com_sub_grafos")
+          return b64encode(grafo._repr_image_png()).decode()
+        else:
+          for _, row in dataframe.iterrows():
+            verdade = row.isnull()
+            if not verdade[1]:
+              if not verdade[2]:
+                grafo.edge(row.origem, row.destino, str(row.label))
+              else:
+                grafo.edge(row.origem, row.destino)
+            else:
+              grafo.node(row.origem)
+          grafo.render("grafo/static/images/grafo", overwrite_source=True)
+          return b64encode(grafo._repr_image_png()).decode()
+
+
+    def __kosaraju(self):
+        """ 
+        Algoritmo de Kosaraju (1978) obtém os componentes fortemente conexos do grafo orientado. 
+        1. Execute DFS(G) para obter f[v] para v ∈ V
+        2. Obter o grafo transposto GT (é passado por parametro)
+        3. Execute DFS(GT) considerando os vértices em ordem decrescente de f[v].
+        4. Devolva os conjuntos de vértices de cada árvore da floresta de busca em profundidade obtida
+        """
+
+        visitados = {}
+        for i in self.lista_adjacente.keys():
+            visitados[i] = False
+        
+        ordem = []  # Vetor dos tempos de finalização de cada vértice
+
+        for vertice in self.lista_adjacente.keys():
+            if not visitados[vertice]:
+                self.DFS(vertice, ordem, visitados)
+
+        return self.DFS_transposto(ordem)
+
+    def __startAdj(self):
+        for i in self.dataframe.iloc[:,:2].values.tolist():
+            if i[0] not in self.lista_adjacente.keys():
+                self.lista_adjacente[i[0]] = []
+
+            if i[1] not in self.lista_adjacente.keys():
+                self.lista_adjacente[i[1]] = []
+
+    def __startAdjTrans(self):
+        for i in self.dataframe.iloc[:,:2].values.tolist():
+            if i[0] not in self.lista_adjacente_transposta.keys():
+                self.lista_adjacente_transposta[i[0]] = []
+
+            if i[1] not in self.lista_adjacente_transposta.keys():
+                self.lista_adjacente_transposta[i[1]] = []
+
+    def __hasAresta1(self): 
+        #Requisito 1: Verificar a existencia de uma aresta.
+        return False if (self.dataframe["destino"].isnull().values.all()) else True
+
+    def __hasAresta2(self, inp1): 
+        #Requisito 1: Verificar a existencia de uma aresta em determinado vertice.
+        return True if (self.calcGrau(inp1) > 0) else False
+
+    def __hasAresta3(self, inp1, inp2): 
+        #Requisito 1: Verificar a existencia de uma aresta entre dois vertices.
+        for _, row in self.dataframe.iterrows():
+          if (((row["origem"] == inp1) and (row["destino"] == inp2)) or ((row["origem"] == inp2) and (row["destino"] == inp1))):
+            return True
+        return False
+
+    def __createAresta(self, origem, destino=np.nan, label=np.nan, cluster=np.nan):
+        """Cria as linhas do DataFrame.        
+        Args:
+            origem: vértice inicial, requisito mínimo para geração de um grafo; 
+            destino: vértice final, criando uma aresta da origem até o destino caso
+            passada como argumento;
+            label: label da aresta, podendo conter o peso e o custo formatados;
+            cluster: subgrafo organizado em grupo.
+        """      
+        if len(self.dataframe.query("(origem == @origem) & (destino == @destino) & (label == @label) & (cluster == @cluster)")) == 0:
+            self.dataframe = pd.concat(
+            [self.dataframe, 
+            pd.DataFrame([[origem, destino, label, cluster]], 
+            columns=["origem", "destino", "label", "cluster"])
+            ], 
+            ignore_index=True
+            )
+
+    def __countAresta3(self, inp1, inp2): 
+        """Conta o número de arestas contidas entre dois vértices
+                  
+        Args:
+          inp1, inp2: nome dos vértices que se deseja contar o número de arestas entre
+            
+        Returns:
+          O número de arestas entre os vértices em questão.
+        """
+        n_arestas = 0
+        for _, row in self.dataframe.iterrows():
+          if (((row["origem"] == inp1) and (row["destino"] == inp2)) or ((row["origem"] == inp2) and (row["destino"] == inp1))):
+            n_arestas +=1
+        return n_arestas
+
+
+    def __calcVizinhoGeneric(self, input_name): 
+        """Calcula a adjacência de um vértice de um grafo não-orientado.
+        
+        Correspondente ao requisito 3.
           
+        Args:
+          input_name (String): nome do vértice que se deseja calcular a adjacência.
+            
+        Returns:
+          A adjacência do vértice, que inclui a superior e a inferior.
+        """
+        viz = set()
+        for _, row in self.dataframe.iterrows():
+          if ((row["origem"] == input_name) and (not pd.isnull(row["destino"]))):
+            viz.add(row["origem"])
+            viz.add(row["destino"])
+          elif ((row["origem"] == input_name) and (pd.isnull(row["destino"]))):
+            viz.add(row["origem"])
+          elif (row["destino"] == input_name):
+            viz.add(row["origem"])
+            viz.add(row["destino"])
+          else:
+            continue
+        return viz
+
+    def __calcVizinhoSucessor(self, input_name): 
+        """Calcula a adjacência superior de um vértice de um grafo orientado.
+        
+        Correspondente ao requisito 3.
+          
+        Args:
+          input_name (String): nome do vértice que se deseja calcular a adjacência.
+            
+        Returns:
+          A adjacência superior do vértice;
+        """
+        viz = set()
+        for _, row in self.dataframe.iterrows():
+          if ((row["origem"] == input_name) and (not pd.isnull(row["destino"]))):
+            viz.add(row["origem"])
+            viz.add(row["destino"])
+          elif ((row["origem"] == input_name) and (pd.isnull(row["destino"]))):
+            viz.add(row["origem"])
+          else:
+            continue
+        return viz
+
+    def __calcVizinhoAntecessor(self, input_name): 
+        """Calcula a adjacência inferior de um vértice de um grafo orientado.
+        
+        Correspondente ao requisito 3.
+          
+        Args:
+          input_name (String): nome do vértice que se deseja calcular a adjacência.
+            
+        Returns:
+          A adjacência inferior do vértice;
+        """
+        viz = set()
+        for _, row in self.dataframe.iterrows():
+          if (row["destino"] == input_name):
+            viz.add(row["destino"])
+            viz.add(row["origem"])
+          else:
+            if (row["origem"] == input_name):
+              viz.add(row["origem"])
+        return viz
+
+    def __conversaoDataMatriz(self):
+        grafoData =  self.dataframe.iloc[:,:2].values.tolist()
+        #print(grafoData)
+
+        #print(grafo.dataframe)
+        #grafo.createImg()
+        vert = set()
+        for i in grafoData:
+            for j in i:
+                if j not in vert:
+                    vert.update({j}) #adiciona o vertices no conjunto pra saber quem e
+
+        l = list(vert) #converte para lista total de vertices
+        l.sort()
+        #print(l)
+        count = len(l)
+
+        #faz matriz de adjacencia
+        graph = [0] * count
+        for i in graph:
+            graph[graph.index(i)] = [0] * count #cria a lista da lista (colunas da matriz)
+
+        #def printg(graph):
+        #    for i in graph:
+        #        print(i)
+
+        for i in l: #linha matriz adj
+            g = l.index(i) #localiza vertice na lista
+            for k in l: #coluna matriz adj
+                if i != k:
+                    for v in grafoData: # loop pra procurar vertice i na matriz original
+                        if v[0] == i:
+                            if k == v[1]: #checar se vertice conectado a vertice i e o vertice k, caso positivo bota 1
+                                graph[g][l.index(k)] = 1
+
+        #printg(graph)
+        # multiplicando matriz adj por ela mesma V vezes pra ter matriz caminho
+        b = np.array(graph)
+        c = np.array(graph)
+        for i in range(count):
+            b = b + np.dot(b,c)
+
+        #print("matriz caminho antes\n", b, "\n")
+        lin = 0
+        for i in b:
+            col = 0
+            for j in i:
+                if j > 1: # substitui numeros maiores que 1 por 1 na matriz caminho
+                    b[lin][col] = 1
+                col +=1
+            lin += 1
+        #print("matriz caminho depois\n", b, "\n")
+        # retorna matriz caminho e contagem de vertices
+        self.matrizCaminho = b
 
 
+    def __checarConexidade(self):
+        n = len(self.matrizCaminho)
+        strongly = True # checa se grafo é fortemente conexo
+        for i in range(n):
+            for j in range(n):
+                # se todos os elementos nao forem iguais entao o grafo nao e fortemente conectado
+                if (self.matrizCaminho[i][j] != self.matrizCaminho[j][i]):
+                    strongly = False
+                    break
+            if not strongly:
+              break
+        if (strongly):
+            return "Fortemente conexo"  
+
+        # checa se grafo e unilateral pela matriz triangular superior
+        uppertri = True
+        for i in range(n):
+            for j in range(n):
+                # Se  algum elemento do triangulo superior for 0, entao falso
+                if (i > j and self.matrizCaminho[i][j] == 0):
+                    uppertri = False
+                    break;            
+            if not uppertri:
+                break;    
+        if uppertri:
+            return "Unilateralmente Conexo"
+
+        # checa se grafo e unilateral pela matriz triangular inferior
+        lowertri = True
+        for i in range(n):
+            for j in range(n):
+                # Se  algum elemento do triangulo inferior for 0, entao falso
+                if (i < j and self.matrizCaminho[i][j] == 0):
+                    lowertri = False
+                    break
+            if not lowertri:
+                break;        
+        if lowertri:
+            return "Unilateralmente Conexo"
+        # Se elementos estao em ordem aleatoria e nao sincronizados entao e fraco
+        else:
+            return "Fracamente Conexo"

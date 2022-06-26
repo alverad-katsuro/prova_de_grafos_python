@@ -12,8 +12,8 @@ def index(request):
   global grafo
   form = GrafoForm()
   context = {}
+  print(request)
   if request.method == 'POST':
-    print(request.POST)
     if "botao_cria_grafo" in request.POST and len(request.POST.get("grafo_text")) > 0:
       grafo = Grafo()
       if request.POST.get('digrafo') == "on":
@@ -33,16 +33,22 @@ def index(request):
         grafo.log.append(f"Há aresta entre os vertices {entrada[0]} e {entrada[1]}: {grafo.containsAresta(entrada[0], entrada[1])}")
     #R2
     if "botao_verifica_grau" in request.POST:
-      grafo.log.append(f"O Grau do Vertice {request.POST.get('vertice_grau')} é: {grafo.calcGrau(request.POST.get('vertice_grau'))}")
+      if len(request.POST.get('vertice_grau')) == 1:
+        grafo.log.append(f"O Grau do Vertice {request.POST.get('vertice_grau')} é: {grafo.calcGrau(request.POST.get('vertice_grau'))}")
+      else:
+        grafo.log.append(f"R02 Input incorreto: {request.POST.get('vertice_grau')}")
     #R3
     if "botao_verifica_adj" in request.POST:
-      grafo.log.append(f"Os vertices adjacentes são: {grafo.calcAdjacencia(request.POST.get('vertice_adj'))}")
+      if len(request.POST.get('vertice_adj')) == 1:
+        grafo.log.append(f"Os vertices adjacentes são: {grafo.calcAdjacencia(request.POST.get('vertice_adj'))}")
+      else:
+        grafo.log.append(f"R03 Input incorreto: {request.POST.get('vertice_adj')}")
     #R4
     if "botao_grafo_nori_conexo" in request.POST:
       if grafo.digrafo:
-        grafo.log.append(f"O grafo não orientado é conexo?: {grafo.conexidadeGrafo()}")
+        grafo.log.append("É um grafo orientado")
       else:
-        grafo.log.append("É um grafo não orientado")
+        grafo.log.append(f"O grafo não orientado é conexo?: {grafo.conexidadeGrafo()}")
     #R5
     if "botao_veri_digra_frac_conexo" in request.POST:
       if grafo.digrafo:
@@ -61,7 +67,11 @@ def index(request):
     #R7
     if "botao_di_fort_conex" in request.POST:
       if grafo.digrafo:
-        grafo.log.append(f"O dígrafo é fortemente conexo: {grafo.comp_forts()}")
+        if ("Fortemente conexo" == grafo.conexidadeGrafo(force=True)):
+          grafo.log.append(f"O dígrafo é fortemente conexo: {grafo.comp_forts()}")
+        else:
+          grafo.log.append(f"O grafo orientado não é fortemente conexo")
+          grafo.log.append(f"Componentes: {grafo.comp_forts()}")
       else:
         grafo.log.append("É um grafo não orientado")
     #R8
@@ -79,16 +89,23 @@ def index(request):
         grafo.log.append("Grafo não orientado")
     #R10
     if "botao_veri_planar_2-con_eule" in request.POST:
-      resultado = req10(grafo.dataframe)
-      for key in resultado:
-        grafo.log.append(f"{resultado[key]}")
+      if grafo.conexidadeGrafo():
+        resultado = req10(grafo.dataframe)
+        for key in resultado:
+          if(len(resultado[key][1]) != 0):
+            grafo.log.append(f"{resultado[key]}")
+          else:
+            grafo.log.append(f"{resultado[key][0]}")
+      else:
+        grafo.log.append("Grafo desconexo")
     #R11
     if "botao_caminho_curto_custo" in request.POST:
-      entrada = request.POST.get("short_path").split()
-      print("entrada0", entrada[0])
-      print("entrada1", entrada[1])
       try:
-        grafo.log.append(f"Calculando o caminho mais curto: {grafo.bellmanFord(entrada[0], entrada[1])}")
+        entrada = request.POST.get("short_path").split()
+        if len(entrada) == 2:
+          grafo.log.append(f"Calculando o caminho mais curto: {grafo.bellmanFord(entrada[0], entrada[1])}")
+        else:
+          grafo.log.append("Destino não inserido")
       except ValueError:
         grafo.log.append("R11 Impossivel encontrar caminho")
     #R12
