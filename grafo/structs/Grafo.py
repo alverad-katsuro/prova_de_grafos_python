@@ -729,8 +729,7 @@ class Grafo():
       """
       dest_node = ''
       weight_dest = 0
-      currNParentNWeight = ('','', 0)
-      
+    
       list_nodeNodeNWeight = []
       for _, row in self.dataframe.iterrows():
              
@@ -755,12 +754,10 @@ class Grafo():
           !Requisito 11!
       """ 
 
-      vertices = set()
       newGraph = self
       for _, row in self.dataframe.iterrows():
         if (not pd.isnull(row["destino"])):
-          #vertices.add(row["origem"]) 
-          #vertices.add(row["destino"])
+
           if (pd.isnull(row["label"])):
             row["label"] = 1
             newGraph = row["label"]
@@ -769,6 +766,21 @@ class Grafo():
 
 
 
+    def doubleEdges(self):
+      """ Duplica as arestas do grafo permitindo buscas no sentido inverso
+          se tem (u, v) entao adiciona (v, u) 
+
+          !Requisito 11!
+      """
+      newGraph = self
+      for _, row in self.dataframe.iterrows():
+        if (not pd.isnull(row["destino"])):
+          newGraph.__createAresta(row["destino"], row["origem"])
+          
+      return newGraph
+ 
+
+    
     def bellmanFord(self, src, goal):
       """ Executa o algoritmo de bellmanFord a partir de uma origem(src) até um alvo(goal)
           
@@ -779,7 +791,12 @@ class Grafo():
 
           !Requisito 11!
       """ 
-    
+
+      #grafo.digrafo = False
+      if self.digrafo == False:
+        self = copy.deepcopy(self.doubleEdges())
+        
+        
       print(self.defaultLabelToOne())
       self = self.defaultLabelToOne()
       vertices = self.getVertices()
@@ -807,7 +824,6 @@ class Grafo():
       for i in range(V):
             print("BellmanFord:")
             
-            print (("%d" %dist[i]) if dist[i] != "Inf" else  "Inf" ,end=" ")
             if dist[i] != "Inf":
               list_dists.append(dist[i])
 
@@ -881,8 +897,8 @@ class Grafo():
                 print("ce")
                
                 dist[vertices.index(node)] = dist[vertices.index(i)] + weight
-                #previousNode[vertices.index(node)] = (i, dist[vertices.index(i)] + weight)
                 previousNode[vertices.index(node)] = (i)
+
       for i in range(V):
             print("Dijkstra:")
             
