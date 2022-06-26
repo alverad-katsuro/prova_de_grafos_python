@@ -1,0 +1,13 @@
+digraph G {
+	rankdir=LR shape=circle size=30.0
+	subgraph "cluster 0" {
+		color=yellow label="Componente 0"
+		R0 -> R1 [label=155]
+	}
+	subgraph "cluster 1" {
+		color=pink label="Componente 1"
+		R1 -> R2 [label=155]
+		R2 -> R3 [label=155]
+		R3 -> R1 [label=155]
+	}
+}

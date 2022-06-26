@@ -1,0 +1,50 @@
+{% extends "_base.html" %}
+{% load static %}
+{% block content %}
+
+<div class="flex items-center justify-center min-h-screen bg-white">
+  <div class="col-span-12">
+    <div class="overflow-auto lg:overflow-visible">
+      <table class="table text-gray-400 border-separate space-y-6 text-sm">
+        <thead class="bg-blue-500 text-white">
+          <tr>
+            <th class="p-3">Aluno</th>
+            <th class="p-3 text-center">Matrícula</th>
+          </tr>
+        </thead>
+        <tbody>
+
+          <tr class="bg-blue-200 lg:text-black">
+            <td class="p-3 font-medium capitalize">Alfredo Gabriel de Sousa Oliveira</td>
+            <td class="p-3">202004940020</td>
+          </tr>
+          
+          <tr class="bg-blue-200 lg:text-black">
+            <td class="p-3 font-medium capitalize">Jonas Alberto da Vera Cruz Gomes</td>
+            <td class="p-3">201904940023</td>
+          </tr>
+
+          <tr class="bg-blue-200 lg:text-black">
+            <td class="p-3 font-medium capitalize">Kalil Saldanha Kaliffe</td>
+            <td class="p-3">202004940030</td>
+          </tr>
+
+          <tr class="bg-blue-200 lg:text-black">
+            <td class="p-3 font-medium capitalize">Marcus Maciel Oliveira</td>
+            <td class="p-3">202004940003</td>
+          </tr>
+
+          <tr class="bg-blue-200 lg:text-black">
+            <td class="p-3 font-medium capitalize">Pedro Inácio de Carvalho Junior</td>
+            <td class="p-3">202004940011</td>
+          </tr>
+
+      
+        </tbody>
+      </table>
+    </div>
+  </div>
+</div>
+
+
+{% endblock content %}

@@ -1,5 +1,5 @@
 import networkx as nx
-from structs.Grafo import Grafo as Grafo
+
 
 class Grafo_class:
     """ Grafo utilizando lista de adjacencia. """
@@ -27,10 +27,6 @@ class Grafo_class:
         self.grau[u] -= 1
         self.grau[w] -= 1 
 
-    def mostrar(self):
-        for i in range(len(self.lista_adjacente)):
-            print(f"{arestas_to_number_reverse[i]}: {', '.join(str(arestas_to_number_reverse[x]) for x in self.lista_adjacente[i])}")
-
     def pontos_de_articulacoes(self):
         """
         Retorna os vértices que são pontos de articulações do grafo.
@@ -49,15 +45,14 @@ class Grafo_class:
 
         self.DFS(0, pre, pai, low)  # Assumindo que o grafo é conexo (começa o DFS do vértice 0)
         if(self.qtd_vertices <= 2):
-            print(f"\nEste grafo não é biconexo pois a quantidade de vértices é <= 2 !!!")
-            return self.lista_articulacoes
+              a = "Este grafo não é biconexo pois a quantidade de vértices é <= 2 !!!"
+              return a, self.lista_articulacoes
         elif(len(self.lista_articulacoes) == 0):
-            print("\nEste grafo não possui nenhum ponto de articulação!!!")
-            print("Então ele é biconexo, pois é necessário tirar no mínimo duas arestas para tornar o mesmo DESCONEXO!!!")
-            return self.lista_articulacoes
+              a = ("Então ele é biconexo, pois é necessário tirar no mínimo duas arestas para tornar o mesmo DESCONEXO!!!")
+              return a, self.lista_articulacoes
         else:
-            print("\nEste grafo não é biconexo pois ele possui os seguintes pontos de articulação: ", end='')
-            return self.lista_articulacoes
+              a = ("\nEste grafo não é biconexo pois ele possui os seguintes pontos de articulação: ")
+              return a, self.lista_articulacoes
 
     def DFS(self, vertice, pre, pai, low):
         Grafo_class.tempo += 1
@@ -120,7 +115,8 @@ class Grafo_class:
                     self.vertices.remove(vertice)
                 
                 if self.grau[w] == 0:
-                    self.vertices.remove(w)
+                    if len(self.vertices) > 0:
+                      self.vertices.remove(w)
 
                 self.trilha_euleriana(w, trilha)
                 return 
@@ -171,13 +167,11 @@ class Grafo_class:
         """ Um grafo tem uma trilha euleriana se exatamente 2 vértices de grau ímpar. """
         print('\n')
         if(len(self.vertices_de_grau_impar) == 0):
-            print('O grafo é euleriano!!!')
-            print('Ciclo euleriano encontrado pelo algoritmo de Fleury: ', end='')
+            return ('O grafo é euleriano!!! Ciclo euleriano encontrado pelo algoritmo de Fleury: ')
         elif(len(self.vertices_de_grau_impar) == 2):
-            print('O grafo é semi-euleriano!!!')
-            print('Trilha euleriana encontrada pelo algoritmo de Fleury: ', end='')
+            return ('O grafo é semi-euleriano!!! Trilha euleriano encontrado pelo algoritmo de Fleury: ')
         elif(len(self.vertices_de_grau_impar) > 2):
-            print('O grafo não é euleriano e nem semi-euleriano!!!')
+            return ('O grafo não é euleriano e nem semi-euleriano!!!')
 
     def eh_planar(self, grafo):
         print('\n')
@@ -186,19 +180,13 @@ class Grafo_class:
 
         #exibição do resultado da verificação da planaridade
         if(g[0]):
-            print("O grafo é planar!!!")
+            return ("O grafo é planar!!!")
         else:
-            print("O grafo não é planar!!!")
+            return ("O grafo não é planar!!!")
 
-if __name__ == "__main__":
-    arestas = Grafo() #grafo que vem da aplicação
-    arestas.createDataFrame("R0 R1 5\nR1 R2 7\nR2 R1 9 4 \nR2 R3 3")
-    arestas = arestas.dataframe.iloc[:,:2].values.tolist()
-
-    #arestas = [('A', 'B'), ('A', 'D'), ('B', 'C'), ('C', 'D'), ('D', 'E'), ('E', 'F'), ('E', 'I'), ('F', 'G'), ('F', 'H'), ('F', 'I')] #ex slide 1.p30 c/ponto de articulação
-    #arestas = [('A', 'C'), ('A', 'D'), ('B', 'C'), ('B', 'D'), ('B', 'E'), ('D', 'E')] #ex slide 1.p31 s/ponto de articulação -- 2-conexo
-    #arestas = [('A', 'D'), ('A', 'E'), ('A', 'F'), ('B', 'D'), ('B', 'E'), ('B', 'F'), ('C', 'D'), ('C', 'E'), ('C', 'F')] #ex não planar -> K3,3
-    #arestas = [('A', 'B')]#teste com o menor grafo possível
+def req10(dataframe):
+    arestas = dataframe.iloc[:,:2].values.tolist()
+    retornos = {}
 
     #objetos usados para adaptar os tipos de dados dos vértices com os tipos de dados que são aceitos nas funções
     arestas_conversion = []
@@ -233,19 +221,23 @@ if __name__ == "__main__":
 
     #-> Biconexo <-
     #resultado grafo biconexo
-    resultado = grafo.pontos_de_articulacoes()
+    resultado_temp = grafo.pontos_de_articulacoes()
+    resultado = resultado_temp[1]
+    retornos["biconexo"] = resultado_temp
 
+    #retornos["pontos_articulacoes"] = (f"{' | '.join(str(i) for i in resultado)}")
     #retirando as adaptações que ocorreram acima
     for i in range(0, len(resultado)):
         resultado[i] = arestas_to_number_reverse[resultado[i]]
 
     #imprimindo os pontos de articulações
-    if(len(resultado) != 0):  print(f"{' | '.join(str(i) for i in resultado)}")
+    if(len(resultado) != 0):
+        retornos["pontos_articulacoes"] = (f"{' | '.join(str(i) for i in resultado)}")
    
 
     #-> Euleriano <-
     #função para verificar se o grafo é euleriano
-    grafo.eh_euleriano()
+    retornos['euleriano'] = grafo.eh_euleriano()
 
     #obtendo o possível caminho euleriano
     resultado = grafo.fleury()
@@ -255,9 +247,13 @@ if __name__ == "__main__":
         resultado[i] = arestas_to_number_reverse[resultado[i]]
 
     #imprimindo o caminho euleriano
-    if(len(resultado) != 0): print(f"{' -> '.join(str(i) for i in resultado)}")
+    if(len(resultado) != 0):
+        retornos["caminho_euleriano"] = (f"{' | '.join(str(i) for i in resultado)}")
+        #print(f"{' -> '.join(str(i) for i in resultado)}")
 
 
     #-> Planar <-
     #verificando se o grafo é planar
-    grafo.eh_planar(arestas)
+    retornos["planar?"] = grafo.eh_planar(arestas)
+
+    return retornos

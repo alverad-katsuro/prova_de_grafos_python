@@ -1,6 +1,6 @@
 {
   "scripts": {
-    "build": "tailwindcss -i static/css/main.css -o static/css/main.min.css",
+    "build": "tailwindcss -i static/css/main.css -o static/css/main.min.css --watch",
     "watch": "npm-watch"
   },
   "watch": {

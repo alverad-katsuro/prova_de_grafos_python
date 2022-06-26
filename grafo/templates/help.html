@@ -1,0 +1,153 @@
+{% extends "_base.html" %}
+{% load static %}
+{% block content %}
+  <div class="flex items-center justify-center min-h-screen bg-white">
+    <div class="col-span-12">
+      <div class="overflow-auto lg:overflow-visible">
+        <table class="table text-gray-400 border-separate space-y-6 text-sm">
+          <thead class="bg-blue-500 text-white">
+            <tr>
+              <th class="p-3">Número</th>
+              <th class="p-3 text-center">Requisito</th>
+              <th class="p-3 text-center">Status</th>
+            </tr>
+          </thead>
+          <tbody>
+
+            <tr class="bg-blue-200 lg:text-black">
+              <td class="p-3 font-medium capitalize">RX</td>
+              <td class="p-3">Plotar visualmente o grafo.</td>
+
+              <td class="p-3">
+                <span class="bg-green-400 text-gray-50 rounded-md px-2"
+                  >Concluido</span>
+              </td>
+            </tr>
+        
+            <tr class="bg-blue-200 lg:text-black">
+              <td class="p-3 font-medium capitalize">R01</td>
+              <td class="p-3">Verificar a existência de uma aresta.</td>
+
+              <td class="p-3">
+                <span class="bg-green-400 text-gray-50 rounded-md px-2"
+                  >Concluido</span>
+              </td>
+            </tr>
+
+            <tr class="bg-blue-200 lg:text-black">
+              <td class="p-3 font-medium capitalize">R02</td>
+              <td class="p-3">Informar o grau de um vértice.</td>
+
+              <td class="p-3">
+                <span class="bg-green-400 text-gray-50 rounded-md px-2"
+                  >Concluido</span>
+              </td>
+            </tr>
+
+            <tr class="bg-blue-200 lg:text-black">
+              <td class="p-3 font-medium capitalize">R03</td>
+              <td class="p-3">Informar a adjacência de um vértice.</td>
+
+              <td class="p-3">
+                <span class="bg-green-400 text-gray-50 rounded-md px-2"
+                  >Concluido</span>
+              </td>
+            </tr>
+
+            <tr class="bg-blue-200 lg:text-black">
+              <td class="p-3 font-medium capitalize">R04</td>
+              <td class="p-3">Verificar se um grafo não-orientado é conexo.</td>
+
+              <td class="p-3">
+                <span class="bg-green-400 text-gray-50 rounded-md px-2"
+                  >Concluido</span>
+              </td>
+            </tr>
+
+            <tr class="bg-blue-200 lg:text-black">
+              <td class="p-3 font-medium capitalize">R05</td>
+              <td class="p-3">Verificar se um dı́grafo é fracamente conexo.</td>
+
+              <td class="p-3">
+                <span class="bg-green-400 text-gray-50 rounded-md px-2"
+                  >Concluido</span>
+              </td>
+            </tr>
+
+            <tr class="bg-blue-200 lg:text-black">
+              <td class="p-3 font-medium capitalize">R06</td>
+              <td class="p-3">Verificar se um dı́grafo é unilateralmente conexo.</td>
+
+              <td class="p-3">
+                <span class="bg-green-400 text-gray-50 rounded-md px-2"
+                  >Concluido</span>
+              </td>
+            </tr>
+
+            <tr class="bg-blue-200 lg:text-black">
+              <td class="p-3 font-medium capitalize">R07</td>
+              <td class="p-3">Verificar se um dı́grafo é fortemente conexo e informar qual ou quais são os seus componentes fortemente conexos.</td>
+
+              <td class="p-3">
+                <span class="bg-green-400 text-gray-50 rounded-md px-2"
+                  >Concluido</span>
+              </td>
+            </tr>
+
+            <tr class="bg-blue-200 lg:text-black">
+              <td class="p-3 font-medium capitalize">R08</td>
+              <td class="p-3">Dado um grafo conexo, verificar se ele é cı́clico.</td>
+
+              <td class="p-3">
+                <span class="bg-green-400 text-gray-50 rounded-md px-2">Concluido</span>
+              </td>
+            </tr>
+
+            <tr class="bg-blue-200 lg:text-black">
+              <td class="p-3 font-medium capitalize">R09</td>
+              <td class="p-3">Dado um dı́grafo acı́clico e conexo, informar uma ordenação topológica presente no dı́grafo.</td>
+
+              <td class="p-3">
+                <span class="bg-green-400 text-gray-50 rounded-md px-2"
+                  >Concluido</span>
+              </td>
+            </tr>
+
+            <tr class="bg-blue-200 lg:text-black">
+              <td class="p-3 font-medium capitalize">R10</td>
+              <td class="p-3">Dado um grafo não-orientado e conexo, verificar se ele é planar, 2-conexo e/ou euleriano. Caso seja possı́vel, informar um ciclo euleriano presente no grafo.</td>
+
+              <td class="p-3">
+                <span class="bg-green-400 text-gray-50 rounded-md px-2"
+                  >Concluido</span>
+              </td>
+            </tr>
+
+            <tr class="bg-blue-200 lg:text-black">
+              <td class="p-3 font-medium capitalize">R11</td>
+              <td class="p-3">Caso seja possı́vel, encontrar um caminho mais curto (grafos não-ponderados) ou de menor custo (grafos ponderados) entre dois vértices.</td>
+
+              <td class="p-3">
+                <span class="bg-green-400 text-gray-50 rounded-md px-2"
+                  >Concluido</span>
+              </td>
+            </tr>
+
+            <tr class="bg-blue-200 lg:text-black">
+              <td class="p-3 font-medium capitalize">R12</td>
+              <td class="p-3">Encontrar uma árvore geradora mı́nima de um grafo não-orientado e conexo.</td>
+
+              <td class="p-3">
+                <span class="bg-red-400 text-gray-50 rounded-md px-2"
+                  >BUG</span>
+              </td>
+            </tr>
+
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+
+
+{% endblock content %}

@@ -13,6 +13,8 @@
     <title>Prova Grafos</title>
     <link rel="stylesheet" href="{% static 'css/main.min.css' %}">
     <script src="{% static 'js/index.min.js' %}"></script>
+    <script src="{% static 'js/collapse_menu_user.js' %}"></script>
+    <script src="{% static 'js/collapse_navbar.js' %}"></script>
 
 
 
@@ -20,6 +22,10 @@
 </head>
 
 <body class="">
+
+  {% include "_navbar.html" %}
+
+
   {% block content %}
   {% endblock content %}
 </body>
