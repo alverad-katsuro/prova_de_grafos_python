@@ -775,7 +775,7 @@ class Grafo():
       newGraph = self
       for _, row in self.dataframe.iterrows():
         if (not pd.isnull(row["destino"])):
-          newGraph.__createAresta(row["destino"], row["origem"])
+          newGraph.__createAresta(row["destino"], row["origem"], row["label"])
           
       return newGraph
  
