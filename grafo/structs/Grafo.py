@@ -389,6 +389,9 @@ class Grafo():
           vertices = list(self.getVertices())
           for i in range(0, len(vertices)):
             for j in range(0, len(vertices)):
+              if vertices[i] == vertices[j]:
+                if self.__hasAresta3(vertices[i], vertices[j]):
+                  return True
               if self.__countAresta3(vertices[i], vertices[j]) > 1:
                 return True
           return False
