@@ -12,14 +12,14 @@ que permite a criação de uma interface em _web_,
 o que faz com que seja possível a disposição dos grafos resultantes de forma visual em uma interface na qual seja possível a inserção do grafo e determinação de qual operação executar, além da visualização de determinados resultados.
 
 ### Dependências necessárias
- As dependências necessárias para a execução de todo o projeto são as seguintes dependências:
+ As dependências necessárias para a execução de todo o projeto são várias, sendo fundamental as seguintes:
+  - Python 3.8 ou superior;
   - Django;
   - Pandas;
-  - Graphviz (source)/ o do python é so uma interface para systemcalls;
-  - Python 3.8 ou superior;
+  - Graphviz;
    
-  Pelo fato de essas dependências estarem reunidas em um arquivo denominado _requirements.txt_,
-  é possível instalar as dependências citadas pelo seguinte comando:
+  Contudo, existem outras dependências, todas reunidas em um arquivo denominado _requirements.txt_, e
+  é possível instalar todas essas dependências citadas pelo seguinte comando:
   ```
   python3 -m pip install -r requirements.txt
   ```
